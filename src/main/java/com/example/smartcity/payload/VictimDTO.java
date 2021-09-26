@@ -10,4 +10,8 @@ public class VictimDTO {
     private String phoneNumber;
 
     private String remark;
+
+    public VictimDTO(long cardNumber) {
+        this.cardNumber = cardNumber;
+    }
 }

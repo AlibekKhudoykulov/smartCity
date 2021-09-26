@@ -1,6 +1,7 @@
 package com.example.smartcity.Service;
 
 import com.example.smartcity.payload.ApiResponse;
+import com.example.smartcity.payload.CrimeDTO;
 
 import java.util.UUID;
 
@@ -13,9 +14,9 @@ public interface CrimeService {
 
     ApiResponse getCrimeById(UUID id);
 
-    ApiResponse addCrime();
+    ApiResponse addCrime(CrimeDTO crimeDTO);
 
-    ApiResponse editCrime();
+    ApiResponse editCrime(UUID id,CrimeDTO crimeDTO);
 
     ApiResponse deleteCrime(UUID id);
 }

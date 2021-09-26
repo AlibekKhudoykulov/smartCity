@@ -14,4 +14,8 @@ public class PrisonerDTO {
     private Date startingDate;
 
     private Date endingDate;
+
+    public PrisonerDTO(long cardNumber) {
+        this.cardNumber = cardNumber;
+    }
 }

@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class OfficerImpl implements OfficerService {
+public class OfficerServiceImpl implements OfficerService {
 
     @Autowired
     private OfficerRepository officerRepository;
@@ -29,13 +29,17 @@ public class OfficerImpl implements OfficerService {
 
     @Override
     public ApiResponse getOfficerById(UUID id) {
-        Officer officer = officerRepository.findById(id).orElseThrow(() -> new RestException("Officer not found", HttpStatus.NOT_FOUND));
+        Officer officer = officerRepository.findById(id)
+                .orElseThrow(() -> new RestException("Officer not found", HttpStatus.NOT_FOUND));
+
         return new ApiResponse("success", true, officer);
     }
 
     @Override
     public ApiResponse getOfficerByCardNumber(long cardNumber) {
-        Officer officer = officerRepository.findByCardNumber(cardNumber).orElseThrow(() -> new RestException("Officer not found", HttpStatus.NOT_FOUND));
+        Officer officer = officerRepository.findByCardNumber(cardNumber)
+                .orElseThrow(() -> new RestException("Officer not found", HttpStatus.NOT_FOUND));
+
         return new ApiResponse("Success", true, officer);
     }
 

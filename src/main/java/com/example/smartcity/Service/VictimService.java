@@ -1,6 +1,7 @@
 package com.example.smartcity.Service;
 
 import com.example.smartcity.payload.ApiResponse;
+import com.example.smartcity.payload.VictimDTO;
 
 import java.util.UUID;
 
@@ -13,9 +14,9 @@ public interface VictimService {
 
     ApiResponse getVictimById(UUID id);
 
-    ApiResponse addVictim();
+    ApiResponse addVictim(VictimDTO victimDTO);
 
-    ApiResponse editVictim();
+    ApiResponse editVictim(UUID id,VictimDTO victimDTO);
 
     ApiResponse deleteVictim(UUID id);
 }

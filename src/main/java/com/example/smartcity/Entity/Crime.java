@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class Crime extends AbsEntity {
     private String address;
 
     @Column(nullable = false)
-    private Date crimeTime;
+    private LocalDateTime crimeTime;
 
     private String crimeDescription;
 
