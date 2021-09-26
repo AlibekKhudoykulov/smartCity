@@ -12,15 +12,15 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Arrested extends AbsEntity {
+public class Prisoner extends AbsEntity {
 
     private Long cardNumber;
 
-    private String name;
+    private String firstName;
 
     private String surname;
 
-    private int age;
+    private Date birthDate;
 
     private String prisonDuration;
 

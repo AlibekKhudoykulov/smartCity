@@ -36,7 +36,7 @@ public class Crime extends AbsEntity {
     private List<Victim> victims;
 
     @ManyToMany
-    private List<Arrested> arrested;
+    private List<Prisoner> prisoner;
 
     @ManyToMany
     private List<Officer> officers;

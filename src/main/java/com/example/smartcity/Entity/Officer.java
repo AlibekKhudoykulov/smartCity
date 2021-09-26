@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,13 @@ import java.util.List;
 @NoArgsConstructor
 public class Officer extends AbsEntity {
 
-    private Long cardNumber;
+    private long cardNumber;
+
+    private String firstName;
+
+    private String LastName;
+
+    private Date birthDate;
 
     @Enumerated(EnumType.STRING)
     private OfficerRank rank;

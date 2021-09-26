@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class Victim extends AbsEntity {
 
     private String surname;
 
-    private int age;
+    private Date birthDate;
 
     private String phoneNumber;
 
