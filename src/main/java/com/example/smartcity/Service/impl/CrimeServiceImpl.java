@@ -2,19 +2,14 @@ package com.example.smartcity.Service.impl;
 
 import com.example.smartcity.Entity.*;
 import com.example.smartcity.Entity.Enums.CrimeReportStatus;
-import com.example.smartcity.Entity.Enums.CrimeStatus;
 import com.example.smartcity.Repository.*;
 import com.example.smartcity.Service.CrimeService;
-import com.example.smartcity.Service.PrisonerService;
-import com.example.smartcity.Service.WitnessService;
 import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -48,11 +43,7 @@ public class CrimeServiceImpl implements CrimeService {
 
     @Override
     public ApiResponse addCrime(CrimeDTO crimeDTO) {
-
-        List<Witness> witnessList = getWitnessList(crimeDTO.getWitnessCardNumbers());
-        List<Prisoner> prisonerList = getPrisonerList(crimeDTO.getPrisonerCardNumbers());
-        List<Victim> victimList = getVictimList(crimeDTO.getVictimCardNumbers());
-        List<Officer> officerList = getOfficerList(crimeDTO.getOfficerCardNumbers());
+        List<Officer> officerList = getOfficerList(crimeDTO.getOfficers());
         PoliceStation policeStation = checkPoliceStation(crimeDTO.getPoliceStationId());
 
         Crime crime=new Crime(
@@ -60,14 +51,12 @@ public class CrimeServiceImpl implements CrimeService {
                 crimeDTO.getAddress(),
                 LocalDateTime.now(),
                 crimeDTO.getCrimeDescription(),
-                witnessList,
-                victimList,
-                prisonerList,
                 officerList,
                 policeStation,
                 CrimeReportStatus.PENDING,
                 crimeDTO.getCrimeStatus(),
                 crimeDTO.getCrimeType()
+
         );
         crimeRepository.save(crime);
         return new ApiResponse("Saved successfully",true);
@@ -75,7 +64,22 @@ public class CrimeServiceImpl implements CrimeService {
 
     @Override
     public ApiResponse editCrime(UUID id, CrimeDTO crimeDTO) {
-        return null;
+        Crime crime = crimeRepository.findById(id)
+                .orElseThrow(() -> new RestException("Not Found",HttpStatus.NOT_FOUND));
+
+        List<Officer> officerList = getOfficerList(crimeDTO.getOfficers());
+        PoliceStation policeStation = checkPoliceStation(crimeDTO.getPoliceStationId());
+
+        crime.setName(crimeDTO.getName());
+        crime.setAddress(crime.getAddress());
+        crime.setCrimeDescription(crimeDTO.getCrimeDescription());
+        crime.setOfficers(officerList);
+        crime.setPoliceStation(policeStationRepository.getOne(crimeDTO.getPoliceStationId()));
+        crime.setCrimeReportStatus(crimeDTO.getCrimeReportStatus());
+        crime.setCrimeType(crimeDTO.getCrimeType());
+        crime.setCrimeStatus(crimeDTO.getCrimeStatus());
+
+        return new ApiResponse("Edited successfully",true);
     }
 
     @Override
@@ -88,53 +92,12 @@ public class CrimeServiceImpl implements CrimeService {
         }
     }
 
-    public List<Witness> getWitnessList(List<Long> witnessCardNumbers) {
-        List<Witness> witnesses = new ArrayList<>();
-        for (Long witnessCardNumber : witnessCardNumbers) {
-            Optional<Witness> byCardNumber = witnessRepository.findByCardNumber(witnessCardNumber);
-            if (!byCardNumber.isPresent()) {
-                witnessService.addWitness(new WitnessDTO(witnessCardNumber));
-                Optional<Witness> addedWitness = witnessRepository.findByCardNumber(witnessCardNumber);
-                witnesses.add(addedWitness.get());
-            }
-            witnesses.add(byCardNumber.get());
-        }
-        return witnesses;
-    }
 
-    public List<Victim> getVictimList(List<Long> victimCardNumbers) {
-        List<Victim> victims = new ArrayList<>();
-        for (Long victimCardNumber : victimCardNumbers) {
-            Optional<Victim> byCardNumber = victimRepository.findByCardNumber(victimCardNumber);
-            if (!byCardNumber.isPresent()) {
-                victimService.addVictim(new VictimDTO(victimCardNumber));
-                Optional<Victim> addedVictim = victimRepository.findByCardNumber(victimCardNumber);
-                victims.add(addedVictim.get());
-            }
-            victims.add(byCardNumber.get());
-        }
-        return victims;
-    }
-
-    public List<Prisoner> getPrisonerList(List<Long> prisonerCardNumbers) {
-        List<Prisoner> prisoners = new ArrayList<>();
-        for (Long prisonCardNumber : prisonerCardNumbers) {
-            Optional<Prisoner> byCardNumber = prisonerRepository.findByCardNumber(prisonCardNumber);
-            if (!byCardNumber.isPresent()) {
-                prisonerService.addPrisoner(new PrisonerDTO(prisonCardNumber));
-                Optional<Prisoner> addedPrisoner = prisonerRepository.findByCardNumber(prisonCardNumber);
-                prisoners.add(addedPrisoner.get());
-            }
-            prisoners.add(byCardNumber.get());
-        }
-        return prisoners;
-    }
-
-    public List<Officer> getOfficerList(List<Long> officerCardNumbers) {
+    public List<Officer> getOfficerList(List<UUID> officers) {
         List<Officer> officerList = new ArrayList<>();
-        for (Long officerCardNumber : officerCardNumbers) {
-            Optional<Officer> byCardNumber = officerRepository.findByCardNumber(officerCardNumber);
-            if (byCardNumber.isPresent()) officerList.add(byCardNumber.get());
+        for (UUID officer : officers) {
+            Optional<Officer> byId = officerRepository.findById(officer);
+            if (byId.isPresent()) officerList.add(byId.get());
         }
         return officerList;
     }

@@ -25,13 +25,7 @@ public class CrimeDTO {
     @NotBlank(message = "Crime Description must not be empty")
     private String crimeDescription;
 
-    private List<Long> witnessCardNumbers;
-
-    private List<Long> prisonerCardNumbers;
-
-    private List<Long> victimCardNumbers;
-
-    private List<Long> officerCardNumbers;
+    private List<UUID> officers;
 
     @NotBlank(message = "CrimeType must not be empty")
     private CrimeType crimeType;
@@ -42,10 +36,4 @@ public class CrimeDTO {
 
     private CrimeStatus crimeStatus;
 
-    public CrimeDTO(String name, String address, String crimeDescription, CrimeType crimeType) {
-        this.name = name;
-        this.address = address;
-        this.crimeDescription = crimeDescription;
-        this.crimeType = crimeType;
-    }
 }

@@ -3,6 +3,8 @@ package com.example.smartcity.payload;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Data
 public class PrisonerDTO {
@@ -15,7 +17,6 @@ public class PrisonerDTO {
 
     private Date endingDate;
 
-    public PrisonerDTO(long cardNumber) {
-        this.cardNumber = cardNumber;
-    }
+    private List<UUID> crimes;
+
 }

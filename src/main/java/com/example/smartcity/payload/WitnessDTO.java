@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +18,6 @@ public class WitnessDTO {
 
     private String remark;
 
-    public WitnessDTO(long cardNumber) {
-        this.cardNumber = cardNumber;
-    }
+    private List<UUID> crimes;
+
 }

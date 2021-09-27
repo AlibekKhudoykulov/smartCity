@@ -31,15 +31,6 @@ public class Crime extends AbsEntity {
     private String crimeDescription;
 
     @ManyToMany
-    private List<Witness> witnesses;
-
-    @ManyToMany
-    private List<Victim> victims;
-
-    @ManyToMany
-    private List<Prisoner> prisoner;
-
-    @ManyToMany
     private List<Officer> officers;
 
     @OneToOne

@@ -1,8 +1,14 @@
 package com.example.smartcity.payload;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.UUID;
 
 @Data
+@AllArgsConstructor
 public class VictimDTO {
 
     private long cardNumber;
@@ -11,7 +17,5 @@ public class VictimDTO {
 
     private String remark;
 
-    public VictimDTO(long cardNumber) {
-        this.cardNumber = cardNumber;
-    }
+    private List<UUID> crimes;
 }

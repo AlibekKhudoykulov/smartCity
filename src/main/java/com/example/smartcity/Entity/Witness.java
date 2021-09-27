@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,6 +28,7 @@ public class Witness extends AbsEntity {
 
     private String remark;
 
-
+    @ManyToMany
+    private List<Crime> crime;
 
 }

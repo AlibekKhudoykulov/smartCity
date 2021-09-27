@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,4 +29,7 @@ public class Prisoner extends AbsEntity {
     private Date startingDate;
 
     private Date endingDate;
+
+    @ManyToMany
+    private List<Crime> crime;
 }
