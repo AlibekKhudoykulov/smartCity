@@ -1,13 +1,11 @@
 package com.example.smartcity.Controller;
 
-import com.example.smartcity.Service.PoliceStationService;
-import com.example.smartcity.Service.impl.CrimeServiceImpl;
 import com.example.smartcity.Service.impl.PoliceStationServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
-import com.example.smartcity.payload.CrimeDTO;
 import com.example.smartcity.payload.PoliceStationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -19,6 +17,8 @@ public class PoliceStationController {
     @Autowired
     private PoliceStationServiceImpl policeStationService;
 
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<?> getAll(){
         ApiResponse policeStation = policeStationService.getAllStations();

@@ -84,6 +84,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDTO.getEmail());
         user.setRoles(Collections.singleton(role));
         user.setPhoneNumber(userDTO.getPhoneNumber());
+        user.setEnabled(userDTO.isEnabled());
 
         userRepository.save(user);
 

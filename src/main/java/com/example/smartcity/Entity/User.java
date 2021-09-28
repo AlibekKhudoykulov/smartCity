@@ -75,22 +75,23 @@ public class User extends AbsEntity implements UserDetails {
         return this.enabled;
     }
 
+
+    //for user
     public User(String username, String password, String phoneNumber, Long cardNumber, String email, Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.cardNumber = cardNumber;
         this.email = email;
-        this.roles = roles;
     }
 
-    public User(String username, String password, String phoneNumber, Long cardNumber, String email, boolean enabled, Set<Role> roles) {
+    public User(String username, String password, String phoneNumber, Long cardNumber, String email, Set<Role> roles,boolean enabled) {
         this.username = username;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.cardNumber = cardNumber;
         this.email = email;
-        this.enabled = enabled;
         this.roles = roles;
+        this.enabled=enabled;
     }
 }

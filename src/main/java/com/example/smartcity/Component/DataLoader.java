@@ -48,8 +48,8 @@ public class DataLoader implements CommandLineRunner {
                     "12312",
                     213124l,
                     "adasd",
-                    true,
-                    roles
+                    roles,
+                    true
             );
             userRepository.save(user);
         }
