@@ -36,7 +36,7 @@ public class PoliceStationServiceImpl implements PoliceStationService {
     @Override
     public ApiResponse addStation(PoliceStationDTO policeStationDTO) {
         Optional<PoliceStation> byName = policeStationRepository.findByName(policeStationDTO.getName());
-        if (!byName.isPresent()) throw new RestException("Already exists this Police Station",HttpStatus.CONFLICT);
+        if (byName.isPresent()) throw new RestException("Already exists this Police Station",HttpStatus.CONFLICT);
 
         PoliceStation policeStation=new PoliceStation(
                 policeStationDTO.getName(),
@@ -57,7 +57,7 @@ public class PoliceStationServiceImpl implements PoliceStationService {
         station.setName(policeStationDTO.getName());
         station.setAddress(policeStationDTO.getAddress());
         station.setPhoneNumber(policeStationDTO.getPhoneNumber());
-        station.setRemark(station.getRemark());
+        station.setRemark(policeStationDTO.getRemark());
 
         policeStationRepository.save(station);
 

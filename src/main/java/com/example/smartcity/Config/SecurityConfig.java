@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,9 +18,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.UUID;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableJpaAuditing
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     private final AuthServiceImpl authServiceImpl;
@@ -51,5 +56,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authenticated();
             http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
             http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //
+    }
+
+
+    @Bean
+    public AuditorAware<UUID> auditorAware() {
+        return new AuditingConfig();
     }
 }

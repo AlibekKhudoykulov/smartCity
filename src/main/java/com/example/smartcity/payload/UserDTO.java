@@ -20,28 +20,10 @@ public class UserDTO {
     private String password;
 
     @NotBlank(message = "roleId must not be null")
-    private Set<Role> roles;
+    private Integer roleId;
 
     private String email;
 
     private String phoneNumber;
 
-    public UserDTO(long cardNumber, String username, String password, Set<Role> roles) {
-        this.cardNumber = cardNumber;
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
-    }
-
-    public UserDTO(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public UserDTO(String username, String password, String email, String phoneNumber) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-    }
 }

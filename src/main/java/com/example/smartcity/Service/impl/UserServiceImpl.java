@@ -1,6 +1,8 @@
 package com.example.smartcity.Service.impl;
 
+import com.example.smartcity.Entity.Role;
 import com.example.smartcity.Entity.User;
+import com.example.smartcity.Repository.RoleRepository;
 import com.example.smartcity.Repository.UserRepository;
 import com.example.smartcity.Service.UserService;
 import com.example.smartcity.exception.RestException;
@@ -8,17 +10,22 @@ import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public ApiResponse getAllUsers() {
@@ -41,14 +48,16 @@ public class UserServiceImpl implements UserService {
         Optional<User> byCardNumber = userRepository.findByCardNumber(userDTO.getCardNumber());
         if (byCardNumber.isPresent()) throw new RestException("Already registered with this card Number",HttpStatus.CONFLICT);
 
+        Optional<Role> byId = roleRepository.findById(userDTO.getRoleId());
+        Role role = byId.get();
         User user=new User(
                 userDTO.getUsername(),
-                userDTO.getPassword(),
+                passwordEncoder.encode(userDTO.getPassword()),
                 userDTO.getPhoneNumber(),
                 userDTO.getCardNumber(),
                 userDTO.getEmail(),
-                userDTO.getRoles()
-        );
+                new HashSet<>(Collections.singleton(role)));
+
 
         userRepository.save(user);
         return new ApiResponse("Saved Successfully",true);
@@ -67,10 +76,13 @@ public class UserServiceImpl implements UserService {
 
         if (b) throw new RestException("Username already existed",HttpStatus.CONFLICT);
 
+        Optional<Role> byId = roleRepository.findById(userDTO.getRoleId());
+        Role role = byId.get();
+
         user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setEmail(userDTO.getEmail());
-        user.setRoles(userDTO.getRoles());
+        user.setRoles(Collections.singleton(role));
         user.setPhoneNumber(userDTO.getPhoneNumber());
 
         userRepository.save(user);
