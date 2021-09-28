@@ -1,4 +1,4 @@
-package com.example.smartcity;
+package com.example.smartcity.Component;
 
 import com.example.smartcity.Entity.Enums.RoleName;
 import com.example.smartcity.Entity.Role;
@@ -12,8 +12,10 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -33,9 +35,16 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (mode.equals("always")) {
-            roleRepository.save(new Role(RoleName.ROLE_ADMIN));
+
+            List<Role> roleList=new ArrayList<>();
+            roleList.add(new Role(RoleName.ROLE_ADMIN));
+            roleList.add(new Role(RoleName.ROLE_MANAGER));
+            roleList.add(new Role(RoleName.ROLE_USER));
+            roleRepository.saveAll(roleList);
             HashSet<Role> roles = new HashSet<>();
             roles.add(roleRepository.findByRoleName(RoleName.ROLE_ADMIN));
+            roles.add(roleRepository.findByRoleName(RoleName.ROLE_MANAGER));
+            roles.add(roleRepository.findByRoleName(RoleName.ROLE_USER));
             User user=new User(
                     "admin",
                     "admin",
