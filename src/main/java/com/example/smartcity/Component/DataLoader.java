@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
 
     @Value("${spring.sql.init.mode}")
@@ -26,11 +27,7 @@ public class DataLoader implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
-
-    public DataLoader(RoleRepository roleRepository, UserRepository userRepository) {
-        this.roleRepository = roleRepository;
-        this.userRepository = userRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -47,7 +44,7 @@ public class DataLoader implements CommandLineRunner {
             roles.add(roleRepository.findByRoleName(RoleName.ROLE_USER));
             User user=new User(
                     "admin",
-                    "admin",
+                    passwordEncoder.encode("admin"),
                     "12312",
                     213124l,
                     "adasd",
