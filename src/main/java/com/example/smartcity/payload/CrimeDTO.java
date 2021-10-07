@@ -22,7 +22,6 @@ public class CrimeDTO {
     @NotBlank(message = "Address must not be empty")
     private String address;
 
-    @NotBlank(message = "Crime Description must not be empty")
     private String crimeDescription;
 
     private List<UUID> officers;

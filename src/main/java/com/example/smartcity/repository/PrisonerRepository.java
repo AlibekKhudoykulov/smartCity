@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface PrisonerRepository extends JpaRepository<Prisoner, UUID> {
     Optional<Prisoner> findByCardNumber(Long cardNumber);
+
+    Optional<Prisoner> findByCardNumberAndIdNot(long cardNumber,UUID id);
 }

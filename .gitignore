@@ -12,7 +12,8 @@ gen
 ### Java template
 # Compiled class file
 *.class
-
+HELP.md
+SmartCity.iml
 # Log file
 *.log
 

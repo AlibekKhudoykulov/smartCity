@@ -71,7 +71,44 @@ public class PrisonerServiceImpl implements PrisonerService {
 
     @Override
     public ApiResponse editPrisoner(UUID id, PrisonerDTO prisonerDTO) {
-        return null;
+
+        Prisoner prisoner = prisonerRepository.findById(id)
+                .orElseThrow(()-> new RestException("Not found",HttpStatus.NOT_FOUND));
+
+        Optional<Prisoner> byCardNumberAndIdNot = prisonerRepository.findByCardNumberAndIdNot(prisonerDTO.getCardNumber(), id);
+        if (byCardNumberAndIdNot.isPresent()) throw  new RestException("Already added",HttpStatus.CONFLICT);
+
+        CitizenDTO citizenByCardNumber = citizenExternalApiService.getCitizenByCardNumber(prisonerDTO.getCardNumber());
+        System.out.println(citizenByCardNumber);
+
+        List<Crime> crimes=new ArrayList<>();
+
+        for (UUID crime : prisonerDTO.getCrimes()) {
+            Optional<Crime> byId = crimeRepository.findById(crime);
+            if (byId.isPresent()) crimes.add(byId.get());
+        }
+
+//        prisonerDTO.getCardNumber(),
+//                citizenByCardNumber.getFirstName(),
+//                citizenByCardNumber.getSurname(),
+//                citizenByCardNumber.getBirthDate(),
+//                prisonerDTO.getPrisonDuration(),
+//                prisonerDTO.getStartingDate(),
+//                prisonerDTO.getEndingDate(),
+//                crimes
+
+        prisoner.setCardNumber(prisonerDTO.getCardNumber());
+        prisoner.setFirstName(citizenByCardNumber.getFirstName());
+        prisoner.setSurname(citizenByCardNumber.getSurname());
+        prisoner.setBirthDate(citizenByCardNumber.getBirthDate());
+        prisoner.setPrisonDuration(prisonerDTO.getPrisonDuration());
+        prisoner.setStartingDate(prisonerDTO.getStartingDate());
+        prisoner.setEndingDate(prisonerDTO.getEndingDate());
+        prisoner.setCrime(crimes);
+
+        prisonerRepository.save(prisoner);
+        return new ApiResponse("success",true);
+
     }
 
     @Override
