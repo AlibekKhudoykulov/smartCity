@@ -1,10 +1,10 @@
 package com.example.smartcity.component;
 
-import com.example.smartcity.Entity.Enums.RoleName;
-import com.example.smartcity.Entity.Role;
-import com.example.smartcity.Entity.User;
-import com.example.smartcity.Repository.RoleRepository;
-import com.example.smartcity.Repository.UserRepository;
+import com.example.smartcity.entity.enums.RoleName;
+import com.example.smartcity.entity.Role;
+import com.example.smartcity.entity.User;
+import com.example.smartcity.repository.RoleRepository;
+import com.example.smartcity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;

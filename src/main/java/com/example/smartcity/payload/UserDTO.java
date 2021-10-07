@@ -1,11 +1,8 @@
 package com.example.smartcity.payload;
 
-import com.example.smartcity.Entity.Role;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Set;
-import java.util.UUID;
 
 @Data
 public class UserDTO {

@@ -1,7 +1,7 @@
 package com.example.smartcity.controller;
 
 
-import com.example.smartcity.Service.impl.AuthServiceImpl;
+import com.example.smartcity.service.impl.AuthServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.LoginDTO;
 import lombok.RequiredArgsConstructor;

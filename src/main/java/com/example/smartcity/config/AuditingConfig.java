@@ -1,6 +1,6 @@
 package com.example.smartcity.config;
 
-import com.example.smartcity.Entity.User;
+import com.example.smartcity.entity.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

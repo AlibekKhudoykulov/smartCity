@@ -1,8 +1,8 @@
 package com.example.smartcity.payload;
 
-import com.example.smartcity.Entity.Enums.CrimeReportStatus;
-import com.example.smartcity.Entity.Enums.CrimeStatus;
-import com.example.smartcity.Entity.Enums.CrimeType;
+import com.example.smartcity.entity.enums.CrimeReportStatus;
+import com.example.smartcity.entity.enums.CrimeStatus;
+import com.example.smartcity.entity.enums.CrimeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

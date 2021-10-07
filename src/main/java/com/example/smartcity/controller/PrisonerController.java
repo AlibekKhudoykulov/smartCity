@@ -1,6 +1,6 @@
 package com.example.smartcity.controller;
 
-import com.example.smartcity.Service.impl.PrisonerServiceImpl;
+import com.example.smartcity.service.impl.PrisonerServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.PrisonerDTO;
 import org.springframework.beans.factory.annotation.Autowired;

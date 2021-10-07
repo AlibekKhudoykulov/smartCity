@@ -1,7 +1,7 @@
 package com.example.smartcity.config;
 
-import com.example.smartcity.Security.JwtFilter;
-import com.example.smartcity.Service.impl.AuthServiceImpl;
+import com.example.smartcity.security.JwtFilter;
+import com.example.smartcity.service.impl.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

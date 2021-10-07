@@ -3,10 +3,10 @@ package com.example.smartcity.controller;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
-import com.example.smartcity.Entity.Enums.CrimeReportStatus;
-import com.example.smartcity.Entity.Enums.CrimeStatus;
-import com.example.smartcity.Entity.Enums.CrimeType;
-import com.example.smartcity.Service.impl.CrimeServiceImpl;
+import com.example.smartcity.entity.enums.CrimeReportStatus;
+import com.example.smartcity.entity.enums.CrimeStatus;
+import com.example.smartcity.entity.enums.CrimeType;
+import com.example.smartcity.service.impl.CrimeServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.CrimeDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
