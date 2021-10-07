@@ -1,4 +1,4 @@
-package com.example.smartcity.Component;
+package com.example.smartcity.component;
 
 import com.example.smartcity.Entity.Enums.RoleName;
 import com.example.smartcity.Entity.Role;
@@ -8,12 +8,10 @@ import com.example.smartcity.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 

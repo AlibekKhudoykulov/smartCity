@@ -1,4 +1,4 @@
-package com.example.smartcity.Controller;
+package com.example.smartcity.controller;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;

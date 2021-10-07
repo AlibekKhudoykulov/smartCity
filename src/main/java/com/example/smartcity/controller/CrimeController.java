@@ -1,4 +1,4 @@
-package com.example.smartcity.Controller;
+package com.example.smartcity.controller;
 
 import com.example.smartcity.Service.impl.CrimeServiceImpl;
 import com.example.smartcity.payload.ApiResponse;

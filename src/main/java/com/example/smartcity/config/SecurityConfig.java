@@ -1,11 +1,10 @@
-package com.example.smartcity.Config;
+package com.example.smartcity.config;
 
 import com.example.smartcity.Security.JwtFilter;
 import com.example.smartcity.Service.impl.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.authentication.AuthenticationManager;

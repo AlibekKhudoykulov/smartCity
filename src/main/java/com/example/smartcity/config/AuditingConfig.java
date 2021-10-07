@@ -1,4 +1,4 @@
-package com.example.smartcity.Config;
+package com.example.smartcity.config;
 
 import com.example.smartcity.Entity.User;
 import org.springframework.data.domain.AuditorAware;

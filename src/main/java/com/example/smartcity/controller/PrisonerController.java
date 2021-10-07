@@ -1,9 +1,7 @@
-package com.example.smartcity.Controller;
+package com.example.smartcity.controller;
 
-import com.example.smartcity.Service.impl.OfficerServiceImpl;
 import com.example.smartcity.Service.impl.PrisonerServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
-import com.example.smartcity.payload.OfficerDTO;
 import com.example.smartcity.payload.PrisonerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
