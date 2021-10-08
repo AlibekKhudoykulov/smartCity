@@ -6,6 +6,7 @@ import com.example.smartcity.service.PoliceStationService;
 import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.PoliceStationDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 @Service
+@RequiredArgsConstructor
 public class PoliceStationServiceImpl implements PoliceStationService {
 
-    @Autowired
-    private PoliceStationRepository policeStationRepository;
+    private final PoliceStationRepository policeStationRepository;
 
     @Override
     public ApiResponse getAllStations() {

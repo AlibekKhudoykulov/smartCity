@@ -1,21 +1,24 @@
 package com.example.smartcity.service.impl;
 
+import com.example.smartcity.entity.Crime;
+import com.example.smartcity.repository.CrimeRepository;
 import com.example.smartcity.service.CitizenExternalApiService;
 import com.example.smartcity.payload.CitizenDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class CitizenExternalApiServiceImpl implements CitizenExternalApiService {
 
-    @Autowired
-    private HTTPRequestServiceImpl httpRequestService;
-
+    private final HTTPRequestServiceImpl httpRequestService;
+    private final CrimeRepository crimeRepository;
 
     @Override
     public CitizenDTO getCitizenByCardNumber(long cardNumber) {
@@ -50,5 +53,17 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
         }
 
         return citizenDTO;
+    }
+
+    @Override
+    public List<Crime> getCrimesWithId(List<UUID> crimes){
+        List<Crime> crimeList=new ArrayList<>();
+        if (crimes!=null) {
+            for (UUID crime : crimes) {
+                Optional<Crime> byId = crimeRepository.findById(crime);
+                if (byId.isPresent()) crimeList.add(byId.get());
+            }
+        }
+        return crimeList;
     }
 }

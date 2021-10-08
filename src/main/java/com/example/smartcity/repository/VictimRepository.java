@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface VictimRepository extends JpaRepository<Victim, UUID> {
     Optional<Victim> findByCardNumber(Long cardNumber);
+    boolean existsByCardNumber(Long cardNumber);
+    boolean existsByCardNumberAndIdNot(Long cardNumber, UUID id);
 }

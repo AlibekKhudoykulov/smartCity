@@ -17,15 +17,9 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CrimeServiceImpl implements CrimeService {
 
-    private CrimeRepository crimeRepository;
-    private WitnessRepository witnessRepository;
-    private VictimRepository victimRepository;
-    private PrisonerRepository prisonerRepository;
-    private PoliceStationRepository policeStationRepository;
-    private OfficerRepository officerRepository;
-    private WitnessServiceImpl witnessService;
-    private VictimServiceImpl victimService;
-    private PrisonerServiceImpl prisonerService;
+    private final CrimeRepository crimeRepository;
+    private final PoliceStationRepository policeStationRepository;
+    private final OfficerRepository officerRepository;
 
 
     @Override
@@ -44,15 +38,23 @@ public class CrimeServiceImpl implements CrimeService {
     @Override
     public ApiResponse addCrime(CrimeDTO crimeDTO) {
 
-        List<Officer> officerList = getOfficerList(crimeDTO.getOfficers());
-        PoliceStation policeStation = checkPoliceStation(crimeDTO.getPoliceStationId());
+        List<Officer> list=new ArrayList<>();
+        if (crimeDTO.getOfficers()!=null) {
+            List<Officer> officerList = getOfficerList(crimeDTO.getOfficers());
+            officerList.addAll(list);
+        }
+
+        PoliceStation policeStation = null;
+        if (crimeDTO.getPoliceStationId()!=null) {
+            policeStation = checkPoliceStation(crimeDTO.getPoliceStationId());
+        }
 
         Crime crime=new Crime(
                 crimeDTO.getName(),
                 crimeDTO.getAddress(),
                 LocalDateTime.now(),
                 crimeDTO.getCrimeDescription(),
-                officerList,
+                list,
                 policeStation,
                 CrimeReportStatus.PENDING,
                 crimeDTO.getCrimeStatus(),

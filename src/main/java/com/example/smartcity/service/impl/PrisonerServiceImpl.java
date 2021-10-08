@@ -9,23 +9,21 @@ import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.CitizenDTO;
 import com.example.smartcity.payload.PrisonerDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class PrisonerServiceImpl implements PrisonerService {
 
-    @Autowired
-    private PrisonerRepository prisonerRepository;
-
-    @Autowired
-    private CitizenExternalApiServiceImpl citizenExternalApiService;
-
-    @Autowired
-    private CrimeRepository crimeRepository;
+    private final PrisonerRepository prisonerRepository;
+    private final CitizenExternalApiServiceImpl citizenExternalApiService;
+    private final CrimeRepository crimeRepository;
 
     @Override
     public ApiResponse getAllArrestedPeople() {
@@ -44,14 +42,9 @@ public class PrisonerServiceImpl implements PrisonerService {
     @Override
     public ApiResponse addPrisoner(PrisonerDTO prisonerDTO) {
         CitizenDTO citizenByCardNumber = citizenExternalApiService.getCitizenByCardNumber(prisonerDTO.getCardNumber());
-        System.out.println(citizenByCardNumber);
 
-        List<Crime> crimes=new ArrayList<>();
+        List<Crime> crimeList= citizenExternalApiService.getCrimesWithId(prisonerDTO.getCrimes());
 
-        for (UUID crime : prisonerDTO.getCrimes()) {
-            Optional<Crime> byId = crimeRepository.findById(crime);
-            if (byId.isPresent()) crimes.add(byId.get());
-        }
 
         Prisoner prisoner=new Prisoner(
                 prisonerDTO.getCardNumber(),
@@ -61,7 +54,7 @@ public class PrisonerServiceImpl implements PrisonerService {
                 prisonerDTO.getPrisonDuration(),
                 prisonerDTO.getStartingDate(),
                 prisonerDTO.getEndingDate(),
-                crimes
+                crimeList
         );
 
         prisonerRepository.save(prisoner);
@@ -76,27 +69,14 @@ public class PrisonerServiceImpl implements PrisonerService {
                 .orElseThrow(()-> new RestException("Not found",HttpStatus.NOT_FOUND));
 
         Optional<Prisoner> byCardNumberAndIdNot = prisonerRepository.findByCardNumberAndIdNot(prisonerDTO.getCardNumber(), id);
-        if (byCardNumberAndIdNot.isPresent()) throw  new RestException("Already added",HttpStatus.CONFLICT);
-
+        if (byCardNumberAndIdNot.isPresent()) throw  new RestException("This CardNumber Already added",HttpStatus.CONFLICT);
         CitizenDTO citizenByCardNumber = citizenExternalApiService.getCitizenByCardNumber(prisonerDTO.getCardNumber());
-        System.out.println(citizenByCardNumber);
 
-        List<Crime> crimes=new ArrayList<>();
+        List<Crime> crimeList = citizenExternalApiService.getCrimesWithId(prisonerDTO.getCrimes());
 
-        for (UUID crime : prisonerDTO.getCrimes()) {
-            Optional<Crime> byId = crimeRepository.findById(crime);
-            if (byId.isPresent()) crimes.add(byId.get());
+        if (crimeList!=null) {
+            prisoner.setCrime(crimeList);
         }
-
-//        prisonerDTO.getCardNumber(),
-//                citizenByCardNumber.getFirstName(),
-//                citizenByCardNumber.getSurname(),
-//                citizenByCardNumber.getBirthDate(),
-//                prisonerDTO.getPrisonDuration(),
-//                prisonerDTO.getStartingDate(),
-//                prisonerDTO.getEndingDate(),
-//                crimes
-
         prisoner.setCardNumber(prisonerDTO.getCardNumber());
         prisoner.setFirstName(citizenByCardNumber.getFirstName());
         prisoner.setSurname(citizenByCardNumber.getSurname());
@@ -104,10 +84,10 @@ public class PrisonerServiceImpl implements PrisonerService {
         prisoner.setPrisonDuration(prisonerDTO.getPrisonDuration());
         prisoner.setStartingDate(prisonerDTO.getStartingDate());
         prisoner.setEndingDate(prisonerDTO.getEndingDate());
-        prisoner.setCrime(crimes);
+
 
         prisonerRepository.save(prisoner);
-        return new ApiResponse("success",true);
+        return new ApiResponse("Prisoner Updated Successfully",true);
 
     }
 

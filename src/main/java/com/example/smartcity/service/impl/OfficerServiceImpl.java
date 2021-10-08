@@ -6,6 +6,7 @@ import com.example.smartcity.service.OfficerService;
 import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.OfficerDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class OfficerServiceImpl implements OfficerService {
 
-    @Autowired
-    private OfficerRepository officerRepository;
+    private final OfficerRepository officerRepository;
 
     @Override
     public ApiResponse getAllOfficers() {
