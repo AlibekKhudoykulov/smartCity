@@ -20,4 +20,9 @@ public class HMACSecretKey {
 
     @Column(nullable = false)
     private String secretKey;
+
+    public HMACSecretKey(String componentName, String secretKey) {
+        this.componentName = componentName;
+        this.secretKey = secretKey;
+    }
 }

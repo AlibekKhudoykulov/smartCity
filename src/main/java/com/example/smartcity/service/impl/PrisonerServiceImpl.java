@@ -23,7 +23,6 @@ public class PrisonerServiceImpl implements PrisonerService {
 
     private final PrisonerRepository prisonerRepository;
     private final CitizenExternalApiServiceImpl citizenExternalApiService;
-    private final CrimeRepository crimeRepository;
 
     @Override
     public ApiResponse getAllArrestedPeople() {
@@ -40,11 +39,11 @@ public class PrisonerServiceImpl implements PrisonerService {
     }
 
     @Override
+    @Transactional
     public ApiResponse addPrisoner(PrisonerDTO prisonerDTO) {
         CitizenDTO citizenByCardNumber = citizenExternalApiService.getCitizenByCardNumber(prisonerDTO.getCardNumber());
 
         List<Crime> crimeList= citizenExternalApiService.getCrimesWithId(prisonerDTO.getCrimes());
-
 
         Prisoner prisoner=new Prisoner(
                 prisonerDTO.getCardNumber(),
@@ -54,15 +53,18 @@ public class PrisonerServiceImpl implements PrisonerService {
                 prisonerDTO.getPrisonDuration(),
                 prisonerDTO.getStartingDate(),
                 prisonerDTO.getEndingDate(),
+                true,
                 crimeList
         );
 
         prisonerRepository.save(prisoner);
+        citizenExternalApiService.sendPrisonerToCityManagement(prisonerDTO.getCardNumber());
         return new ApiResponse("success",true);
 
     }
 
     @Override
+    @Transactional
     public ApiResponse editPrisoner(UUID id, PrisonerDTO prisonerDTO) {
 
         Prisoner prisoner = prisonerRepository.findById(id)
@@ -85,6 +87,13 @@ public class PrisonerServiceImpl implements PrisonerService {
         prisoner.setStartingDate(prisonerDTO.getStartingDate());
         prisoner.setEndingDate(prisonerDTO.getEndingDate());
 
+        if (prisonerDTO.isInPrison()){
+            prisoner.setInPrison(prisonerDTO.isInPrison());
+            citizenExternalApiService.sendPrisonerToCityManagement(prisonerDTO.getCardNumber());
+        }else {
+            prisoner.setInPrison(prisoner.isInPrison());
+            citizenExternalApiService.sendLiberationToCityManagement(prisonerDTO.getCardNumber());
+        }
 
         prisonerRepository.save(prisoner);
         return new ApiResponse("Prisoner Updated Successfully",true);

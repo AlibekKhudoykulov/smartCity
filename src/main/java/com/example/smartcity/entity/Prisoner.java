@@ -33,6 +33,8 @@ public class Prisoner extends AbsEntity {
 
     private Date endingDate;
 
+    private boolean inPrison;
+
     @ManyToMany
     private List<Crime> crime;
 }

@@ -17,6 +17,8 @@ public class PrisonerDTO {
 
     private Date endingDate;
 
+    private boolean inPrison;
+
     private List<UUID> crimes;
 
 }

@@ -22,15 +22,16 @@ public class Officer extends AbsEntity {
 
     private String firstName;
 
-    private String LastName;
+    private String lastName;
 
     private Date birthDate;
+
+    private String certificate;
 
     @Enumerated(EnumType.STRING)
     private OfficerRank rank;
 
     @ManyToOne
     private PoliceStation policeStation;
-
 
 }

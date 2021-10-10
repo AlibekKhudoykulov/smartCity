@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,6 +41,7 @@ public class VictimServiceImpl implements VictimService {
     }
 
     @Override
+    @Transactional
     public ApiResponse addVictim(VictimDTO victimDTO) {
         boolean existsByCardNumber = victimRepository.existsByCardNumber(victimDTO.getCardNumber());
         if (existsByCardNumber) throw new RestException("This card number already added",HttpStatus.CONFLICT);
@@ -52,22 +54,25 @@ public class VictimServiceImpl implements VictimService {
                 citizenByCardNumber.getFirstName(),
                 citizenByCardNumber.getSurname(),
                 citizenByCardNumber.getBirthDate(),
-                victimDTO.getPhoneNumber(),
+                victimDTO.getDeathDate(),
                 victimDTO.getRemark(),
                 crimeList
         );
 
+        citizenExternalApiService.sendDeathPersonToCityManagement(victimDTO.getCardNumber());
         victimRepository.save(victim);
 
         return new ApiResponse("Victim Saved Successfully",true);
     }
 
     @Override
+    @Transactional
     public ApiResponse editVictim(UUID id,VictimDTO victimDTO) {
         Victim victim = victimRepository.findById(id).
                 orElseThrow(() -> new RestException("Not found", HttpStatus.NOT_FOUND));
         boolean byCardNumberAndIdNot = victimRepository.existsByCardNumberAndIdNot(victimDTO.getCardNumber(), id);
         if (byCardNumberAndIdNot) throw new RestException("This Card number already added",HttpStatus.CONFLICT);
+
 
         CitizenDTO citizenByCardNumber = citizenExternalApiService.getCitizenByCardNumber(victimDTO.getCardNumber());
         List<Crime> crimeList = citizenExternalApiService.getCrimesWithId(victimDTO.getCrimes());
@@ -79,7 +84,6 @@ public class VictimServiceImpl implements VictimService {
         victim.setName(citizenByCardNumber.getFirstName());
         victim.setSurname(citizenByCardNumber.getSurname());
         victim.setBirthDate(citizenByCardNumber.getBirthDate());
-        victim.setPhoneNumber(victimDTO.getPhoneNumber());
         victim.setRemark(victimDTO.getRemark());
 
         victimRepository.save(victim);

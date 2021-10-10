@@ -10,4 +10,5 @@ public interface CitizenExternalApiService {
 
      CitizenDTO getCitizenByCardNumber(long cardNumber);
      List<Crime> getCrimesWithId(List<UUID> crimes);
+     String generateCertificate();
 }

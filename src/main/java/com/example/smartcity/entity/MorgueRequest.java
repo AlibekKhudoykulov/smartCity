@@ -8,33 +8,27 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import java.util.Date;
-import java.util.List;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Victim extends AbsEntity {
+public class MorgueRequest extends AbsEntity {
 
-    private Long cardNumber;
+    private long corpseCardNumber;
 
-    private String name;
-
-    private String surname;
-
-    private Date birthDate;
+    private long OfficerCardNumber;
 
     private Date deathDate;
 
-    private String remark;
+    private String causes;
 
-    @ManyToMany
-    private List<Crime> crime;
+    private boolean isEndExamination;
 
-
-
+    @OneToOne
+    private Officer officer;
 
 }

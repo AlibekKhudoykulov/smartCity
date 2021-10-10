@@ -5,5 +5,6 @@ public enum OfficerRank {
     PATROL,
     SHERIFF,
     AGENT,
-    CRIME_SCENE_INVESTIGATION
+    CRIME_SCENE_INVESTIGATION,
+    EXPERT
 }

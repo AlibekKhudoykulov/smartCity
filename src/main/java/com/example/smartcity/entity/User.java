@@ -25,7 +25,6 @@ public class User extends AbsEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(unique = true,nullable = false)
     private String phoneNumber;
 
     private Long cardNumber;

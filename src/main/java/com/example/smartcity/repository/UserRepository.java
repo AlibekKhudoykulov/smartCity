@@ -10,4 +10,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username);
     Optional<User> findByCardNumber(Long cardNumber);
     boolean existsByUsernameAndIdNot(String username, UUID id);
+    boolean existsByCardNumber(Long cardNumber);
 }
