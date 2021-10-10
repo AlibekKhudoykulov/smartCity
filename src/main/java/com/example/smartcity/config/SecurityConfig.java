@@ -51,8 +51,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
             http
                     .csrf().disable()
+                    .httpBasic().disable()
                     .authorizeRequests()
-                    .antMatchers("/api/login").permitAll()
+                    .antMatchers(
+                            "/swagger-ui/",
+                            "/api/login",
+                            "/v2/api-docs",
+                            "/webjars/**",
+                            "/swagger-resources/**",
+                            "/configuration/**",
+                            "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js")
+                    .permitAll()
                     .anyRequest()
                     .authenticated();
             http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
