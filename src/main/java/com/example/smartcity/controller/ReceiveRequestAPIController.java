@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/request")
+@RequiredArgsConstructor
 public class ReceiveRequestAPIController {
 
-    @Autowired
-    private ReceiveRequestAPIServiceImpl receiveRequestAPIService;
+    private final ReceiveRequestAPIServiceImpl receiveRequestAPIService;
 
     @PostMapping("/certificate")
     @AuthorizeRequest

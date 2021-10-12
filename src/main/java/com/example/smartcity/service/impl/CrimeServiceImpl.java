@@ -8,6 +8,7 @@ import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,20 +24,20 @@ public class CrimeServiceImpl implements CrimeService {
 
 
     @Override
-    public ApiResponse getAllCrimes() {
+    public ResponseEntity<?> getAllCrimes() {
         List<Crime> allCrimes = crimeRepository.findAll();
-        return new ApiResponse("Success", true, allCrimes);
+        return ResponseEntity.ok().body(new ApiResponse("Success", true, allCrimes));
     }
 
     @Override
-    public ApiResponse getCrimeById(UUID id) {
+    public ResponseEntity<?> getCrimeById(UUID id) {
         Crime byId = crimeRepository.findById(id)
                 .orElseThrow(() -> new RestException("Crime not found", HttpStatus.NOT_FOUND));
-        return new ApiResponse("Success", true, byId);
+        return ResponseEntity.ok().body(new ApiResponse("Success", true, byId));
     }
 
     @Override
-    public ApiResponse addCrime(CrimeDTO crimeDTO) {
+    public ResponseEntity<?> addCrime(CrimeDTO crimeDTO) {
 
         List<Officer> list=new ArrayList<>();
         if (crimeDTO.getOfficers()!=null) {
@@ -62,11 +63,11 @@ public class CrimeServiceImpl implements CrimeService {
 
         );
         crimeRepository.save(crime);
-        return new ApiResponse("Saved successfully",true);
+        return ResponseEntity.ok().body(new ApiResponse("Saved successfully",true));
     }
 
     @Override
-    public ApiResponse editCrime(UUID id, CrimeDTO crimeDTO) {
+    public ResponseEntity<?> editCrime(UUID id, CrimeDTO crimeDTO) {
         Crime crime = crimeRepository.findById(id)
                 .orElseThrow(() -> new RestException("Not Found",HttpStatus.NOT_FOUND));
 
@@ -82,14 +83,14 @@ public class CrimeServiceImpl implements CrimeService {
         crime.setCrimeType(crimeDTO.getCrimeType());
         crime.setCrimeStatus(crimeDTO.getCrimeStatus());
 
-        return new ApiResponse("Edited successfully",true);
+        return ResponseEntity.ok().body(new ApiResponse("Edited successfully",true));
     }
 
     @Override
-    public ApiResponse deleteCrime(UUID id) {
+    public ResponseEntity<?> deleteCrime(UUID id) {
         try {
             crimeRepository.deleteById(id);
-            return new ApiResponse("Successfully deleted", true);
+            return ResponseEntity.ok().body(new ApiResponse("Successfully deleted", true));
         } catch (Exception e) {
             throw new RestException("Crime Not found", HttpStatus.NOT_FOUND);
         }

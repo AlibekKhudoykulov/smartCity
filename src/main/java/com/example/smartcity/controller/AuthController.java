@@ -20,10 +20,8 @@ public class AuthController {
 
     private final AuthServiceImpl authService;
 
-
     @PostMapping
     public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
-        ApiResponse apiResponse = authService.login(loginDTO);
-        return ResponseEntity.status(apiResponse.isSuccess()?200:401).body(apiResponse);
+        return authService.login(loginDTO);
     }
 }

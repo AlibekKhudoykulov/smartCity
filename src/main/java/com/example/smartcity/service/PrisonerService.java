@@ -2,6 +2,7 @@ package com.example.smartcity.service;
 
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.PrisonerDTO;
+import org.springframework.http.ResponseEntity;
 
 import java.util.UUID;
 
@@ -11,13 +12,13 @@ import java.util.UUID;
 
 public interface PrisonerService {
 
-    ApiResponse getPrisonerById(UUID id);
+    ResponseEntity<?> getPrisonerById(UUID id);
 
-    ApiResponse getAllArrestedPeople();
+    ResponseEntity<?> getAllArrestedPeople();
 
-    ApiResponse addPrisoner(PrisonerDTO prisonerDTO);
+    ResponseEntity<?> addPrisoner(PrisonerDTO prisonerDTO);
 
-    ApiResponse editPrisoner(UUID id,PrisonerDTO prisonerDTO);
+    ResponseEntity<?> editPrisoner(UUID id,PrisonerDTO prisonerDTO);
 
-    ApiResponse deletePrisoner(UUID id);
+    ResponseEntity<?> deletePrisoner(UUID id);
 }

@@ -48,7 +48,7 @@ public class DataLoader implements CommandLineRunner {
                     passwordEncoder.encode("admin"),
                     "12312",
                     213124l,
-                    "Albek@gmail.com",
+                    "Alibek@gmail.com",
                     roles,
                     true
             );

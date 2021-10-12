@@ -12,6 +12,7 @@ import com.example.smartcity.payload.VictimDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,22 +28,22 @@ public class VictimServiceImpl implements VictimService {
     private final CitizenExternalApiServiceImpl citizenExternalApiService;
 
     @Override
-    public ApiResponse getAllVictims() {
+    public ResponseEntity<?> getAllVictims() {
         List<Victim> all = victimRepository.findAll();
-        return new ApiResponse("Success",true,all);
+        return ResponseEntity.ok().body(new ApiResponse("Success",true,all));
     }
 
     @Override
-    public ApiResponse getVictimById(UUID id) {
+    public ResponseEntity<?> getVictimById(UUID id) {
         Victim victim = victimRepository.findById(id)
                 .orElseThrow(() -> new RestException("Victim not found", HttpStatus.NOT_FOUND));
 
-        return new ApiResponse("Success",true, victim);
+        return ResponseEntity.ok().body(new ApiResponse("Success",true, victim));
     }
 
     @Override
     @Transactional
-    public ApiResponse addVictim(VictimDTO victimDTO) {
+    public ResponseEntity<?> addVictim(VictimDTO victimDTO) {
         boolean existsByCardNumber = victimRepository.existsByCardNumber(victimDTO.getCardNumber());
         if (existsByCardNumber) throw new RestException("This card number already added",HttpStatus.CONFLICT);
 
@@ -63,12 +64,12 @@ public class VictimServiceImpl implements VictimService {
         citizenExternalApiService.sendDeathPersonToCityManagement(victimDTO.getCardNumber());
         victimRepository.save(victim);
 
-        return new ApiResponse("Victim Saved Successfully",true);
+        return ResponseEntity.ok().body(new  ApiResponse("Victim Saved Successfully",true));
     }
 
     @Override
     @Transactional
-    public ApiResponse editVictim(UUID id,VictimDTO victimDTO) {
+    public ResponseEntity<?> editVictim(UUID id,VictimDTO victimDTO) {
         Victim victim = victimRepository.findById(id).
                 orElseThrow(() -> new RestException("Not found", HttpStatus.NOT_FOUND));
         boolean byCardNumberAndIdNot = victimRepository.existsByCardNumberAndIdNot(victimDTO.getCardNumber(), id);
@@ -89,14 +90,14 @@ public class VictimServiceImpl implements VictimService {
         victim.setRemark(victimDTO.getRemark());
 
         victimRepository.save(victim);
-        return new ApiResponse("Victim Updated Successfully",true);
+        return ResponseEntity.ok().body(new ApiResponse("Victim Updated Successfully",true));
     }
 
     @Override
-    public ApiResponse deleteVictim(UUID id) {
+    public ResponseEntity<?> deleteVictim(UUID id) {
         try {
             victimRepository.deleteById(id);
-            return new ApiResponse("Successfully deleted", true);
+            return ResponseEntity.ok().body(new ApiResponse("Successfully deleted", true));
         } catch (Exception e) {
             throw new RestException("Victim Not found", HttpStatus.NOT_FOUND);
         }

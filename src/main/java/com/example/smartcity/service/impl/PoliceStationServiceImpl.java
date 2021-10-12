@@ -9,6 +9,7 @@ import com.example.smartcity.payload.PoliceStationDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,21 +22,21 @@ public class PoliceStationServiceImpl implements PoliceStationService {
     private final PoliceStationRepository policeStationRepository;
 
     @Override
-    public ApiResponse getAllStations() {
+    public ResponseEntity<?> getAllStations() {
         List<PoliceStation> policeStationList = policeStationRepository.findAll();
-        return new ApiResponse("Success",true,policeStationList);
+        return ResponseEntity.ok().body(new ApiResponse("Success",true,policeStationList));
     }
 
     @Override
-    public ApiResponse getStationById(UUID id) {
+    public ResponseEntity<?> getStationById(UUID id) {
         PoliceStation byId = policeStationRepository.findById(id)
                 .orElseThrow(()->new RestException("Police Station Not found", HttpStatus.NOT_FOUND));
 
-        return new ApiResponse("Success",true,byId);
+        return ResponseEntity.ok().body(new ApiResponse("Success",true,byId));
     }
 
     @Override
-    public ApiResponse addStation(PoliceStationDTO policeStationDTO) {
+    public ResponseEntity<?> addStation(PoliceStationDTO policeStationDTO) {
         Optional<PoliceStation> byName = policeStationRepository.findByName(policeStationDTO.getName());
         if (byName.isPresent()) throw new RestException("Already exists this Police Station",HttpStatus.CONFLICT);
 
@@ -48,11 +49,11 @@ public class PoliceStationServiceImpl implements PoliceStationService {
 
         policeStationRepository.save(policeStation);
 
-        return new ApiResponse("Police Station Saved Successfully",true);
+        return ResponseEntity.ok().body(new ApiResponse("Police Station Saved Successfully",true));
     }
 
     @Override
-    public ApiResponse editStation(UUID id, PoliceStationDTO policeStationDTO) {
+    public ResponseEntity<?> editStation(UUID id, PoliceStationDTO policeStationDTO) {
         PoliceStation station = policeStationRepository.findById(id)
                 .orElseThrow(() -> new RestException("Police Station Not found",HttpStatus.NOT_FOUND));
         station.setName(policeStationDTO.getName());
@@ -62,14 +63,14 @@ public class PoliceStationServiceImpl implements PoliceStationService {
 
         policeStationRepository.save(station);
 
-        return new ApiResponse("Edited Successfully",true);
+        return ResponseEntity.ok().body(new ApiResponse("Edited Successfully",true));
     }
 
     @Override
-    public ApiResponse deleteStation(UUID id) {
+    public ResponseEntity<?> deleteStation(UUID id) {
         try {
             policeStationRepository.deleteById(id);
-            return new ApiResponse("Successfully deleted", true);
+            return ResponseEntity.ok().body(new ApiResponse("Successfully deleted", true));
         } catch (Exception e) {
             throw new RestException("Police Station Not found", HttpStatus.NOT_FOUND);
         }

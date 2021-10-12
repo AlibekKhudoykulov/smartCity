@@ -12,6 +12,7 @@ import com.example.smartcity.payload.PrisonerDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,22 +26,22 @@ public class PrisonerServiceImpl implements PrisonerService {
     private final CitizenExternalApiServiceImpl citizenExternalApiService;
 
     @Override
-    public ApiResponse getAllArrestedPeople() {
+    public ResponseEntity<?> getAllArrestedPeople() {
         List<Prisoner> prisoners = prisonerRepository.findAll();
-        return new ApiResponse("Success", true, prisoners);
+        return ResponseEntity.ok().body(new ApiResponse("Success", true, prisoners));
     }
 
     @Override
-    public ApiResponse getPrisonerById(UUID id) {
+    public ResponseEntity<?> getPrisonerById(UUID id) {
         Prisoner prisoner = prisonerRepository.findById(id)
                 .orElseThrow(() -> new RestException("Prisoner not found", HttpStatus.NOT_FOUND));
 
-        return new ApiResponse("Success", true, prisoner);
+        return ResponseEntity.ok().body(new ApiResponse("Success", true, prisoner));
     }
 
     @Override
     @Transactional
-    public ApiResponse addPrisoner(PrisonerDTO prisonerDTO) {
+    public ResponseEntity<?> addPrisoner(PrisonerDTO prisonerDTO) {
         CitizenDTO citizenByCardNumber = citizenExternalApiService.getCitizenByCardNumber(prisonerDTO.getCardNumber());
 
         List<Crime> crimeList= citizenExternalApiService.getCrimesWithId(prisonerDTO.getCrimes());
@@ -60,13 +61,13 @@ public class PrisonerServiceImpl implements PrisonerService {
 
         prisonerRepository.save(prisoner);
         citizenExternalApiService.sendPrisonerToCityManagement(prisonerDTO.getCardNumber());
-        return new ApiResponse("success",true);
+        return ResponseEntity.ok().body(new ApiResponse("success",true));
 
     }
 
     @Override
     @Transactional
-    public ApiResponse editPrisoner(UUID id, PrisonerDTO prisonerDTO) {
+    public ResponseEntity<?> editPrisoner(UUID id, PrisonerDTO prisonerDTO) {
 
         Prisoner prisoner = prisonerRepository.findById(id)
                 .orElseThrow(()-> new RestException("Not found",HttpStatus.NOT_FOUND));
@@ -98,15 +99,15 @@ public class PrisonerServiceImpl implements PrisonerService {
         }
 
         prisonerRepository.save(prisoner);
-        return new ApiResponse("Prisoner Updated Successfully",true);
+        return ResponseEntity.ok().body(new ApiResponse("Prisoner Updated Successfully",true));
 
     }
 
     @Override
-    public ApiResponse deletePrisoner(UUID id) {
+    public ResponseEntity<?> deletePrisoner(UUID id) {
         try {
             prisonerRepository.deleteById(id);
-            return new ApiResponse("Successfully deleted", true);
+            return ResponseEntity.ok().body(new ApiResponse("Successfully deleted", true));
         } catch (Exception e) {
             throw new RestException("Prisoner Not found", HttpStatus.NOT_FOUND);
         }

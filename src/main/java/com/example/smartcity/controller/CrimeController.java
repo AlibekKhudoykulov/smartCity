@@ -3,6 +3,7 @@ package com.example.smartcity.controller;
 import com.example.smartcity.service.impl.CrimeServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.CrimeDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,40 +13,35 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/crime")
+@RequiredArgsConstructor
 public class CrimeController {
 
-    @Autowired
-    private CrimeServiceImpl crimeService;
+    private final CrimeServiceImpl crimeService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<?> getAll(){
-        ApiResponse allCrimes = crimeService.getAllCrimes();
-        return ResponseEntity.status(allCrimes.isSuccess()?200:404).body(allCrimes);
+        return crimeService.getAllCrimes();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCrimeById(@PathVariable UUID id){
-        ApiResponse crimeById = crimeService.getCrimeById(id);
-        return ResponseEntity.status(crimeById.isSuccess()?200:404).body(crimeById);
+        return crimeService.getCrimeById(id);
     }
 
     @PostMapping
     public ResponseEntity<?> addCrime(@RequestBody CrimeDTO crimeDTO){
-        ApiResponse crimeById = crimeService.addCrime(crimeDTO);
-        return ResponseEntity.status(crimeById.isSuccess()?201:400).body(crimeById);
+        return crimeService.addCrime(crimeDTO);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> editCrime(@PathVariable UUID id,@RequestBody CrimeDTO crimeDTO){
-        ApiResponse crime = crimeService.editCrime(id,crimeDTO);
-        return ResponseEntity.status(crime.isSuccess()?201:400).body(crime);
+        return crimeService.editCrime(id,crimeDTO);
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCrime(@PathVariable UUID id){
-        ApiResponse crimeById = crimeService.deleteCrime(id);
-        return ResponseEntity.status(crimeById.isSuccess()?200:404).body(crimeById);
+        return crimeService.deleteCrime(id);
     }
 }

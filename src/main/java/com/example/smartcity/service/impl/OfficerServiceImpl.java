@@ -14,6 +14,7 @@ import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.OfficerDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,30 +32,30 @@ public class OfficerServiceImpl implements OfficerService {
     private final UserRepository userRepository;
 
     @Override
-    public ApiResponse getAllOfficers() {
+    public ResponseEntity<?> getAllOfficers() {
         List<Officer> officerList = officerRepository.findAll();
-        return new ApiResponse("Officer list", true, officerList);
+        return ResponseEntity.ok().body(new ApiResponse("Officer list", true, officerList));
     }
 
     @Override
-    public ApiResponse getOfficerById(UUID id) {
+    public ResponseEntity<?> getOfficerById(UUID id) {
         Officer officer = officerRepository.findById(id)
                 .orElseThrow(() -> new RestException("Officer not found", HttpStatus.NOT_FOUND));
         OfficerResponseDTO officerResponseDTO = citizenExternalApiService.forResponseOfficer(officer);
-        return new ApiResponse("success", true, officerResponseDTO);
+        return ResponseEntity.ok().body(new ApiResponse("success", true, officerResponseDTO));
     }
 
     @Override
-    public ApiResponse getOfficerByCardNumber(long cardNumber) {
+    public ResponseEntity<?> getOfficerByCardNumber(long cardNumber) {
         Officer officer = officerRepository.findByCardNumber(cardNumber)
                 .orElseThrow(() -> new RestException("Officer not found", HttpStatus.NOT_FOUND));
 
         OfficerResponseDTO officerResponseDTO = citizenExternalApiService.forResponseOfficer(officer);
-        return new ApiResponse("Success", true, officerResponseDTO);
+        return ResponseEntity.ok().body(new ApiResponse("Success", true, officerResponseDTO));
     }
 
     @Override
-    public ApiResponse addOfficer(OfficerDTO officerDTO) {
+    public ResponseEntity<?> addOfficer(OfficerDTO officerDTO) {
         Optional<Officer> byCardNumber = officerRepository.findByCardNumber(officerDTO.getCardNumber());
         if (byCardNumber.isPresent()) throw new RestException("This card number already added",HttpStatus.CONFLICT);
         CitizenDTO citizenByCardNumber = citizenExternalApiService.getCitizenByCardNumber(officerDTO.getCardNumber());
@@ -90,11 +91,11 @@ public class OfficerServiceImpl implements OfficerService {
         }
 
         citizenExternalApiService.sendCheckingCertificate(save);
-        return new ApiResponse("Officer saved successfully and sent for checking certificate",true);
+        return ResponseEntity.ok().body(new ApiResponse("Officer saved successfully and sent for checking certificate",true));
     }
 
     @Override
-    public ApiResponse editOfficer(UUID id, OfficerDTO officerDTO) {
+    public ResponseEntity<?> editOfficer(UUID id, OfficerDTO officerDTO) {
         Officer officer = officerRepository.findById(id)
                 .orElseThrow(()-> new RestException("Officer not found",HttpStatus.NOT_FOUND));
 
@@ -109,14 +110,14 @@ public class OfficerServiceImpl implements OfficerService {
 
         officerRepository.save(officer);
 
-        return new ApiResponse("Officer updated successfully",true);
+        return ResponseEntity.ok().body(new ApiResponse("Officer updated successfully",true));
     }
 
     @Override
-    public ApiResponse deleteOfficer(UUID id) {
+    public ResponseEntity<?> deleteOfficer(UUID id) {
         try {
             officerRepository.deleteById(id);
-            return new ApiResponse("Successfully deleted", true);
+            return ResponseEntity.ok().body(new ApiResponse("Successfully deleted", true));
 
         } catch (Exception e) {
             throw new RestException("Officer Not found", HttpStatus.NOT_FOUND);

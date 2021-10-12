@@ -99,7 +99,8 @@ public class ReceiveRequestAPIServiceImpl implements ReceiveRequestAPIService {
                 save.getCauses()
         );
 
-        ApiResponse apiResponse = victimService.addVictim(victimDTO);
-        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT).body(apiResponse);
+        ResponseEntity<?> responseEntity = victimService.addVictim(victimDTO);
+        return ResponseEntity.status(responseEntity.getStatusCode().equals(HttpStatus.OK) ? HttpStatus.OK : HttpStatus.CONFLICT).
+                body(responseEntity.getBody());
     }
 }

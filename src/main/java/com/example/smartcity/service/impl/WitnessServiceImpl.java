@@ -11,6 +11,7 @@ import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.WitnessDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,21 +27,21 @@ public class WitnessServiceImpl implements WitnessService {
     private final CrimeRepository crimeRepository;
 
     @Override
-    public ApiResponse getAllWitnesses() {
+    public ResponseEntity<?> getAllWitnesses() {
         List<Witness> witnesses = witnessRepository.findAll();
-        return new ApiResponse("Success",true,witnesses);
+        return ResponseEntity.ok().body(new ApiResponse("Success",true,witnesses));
     }
 
     @Override
-    public ApiResponse getWitnessById(UUID id) {
+    public ResponseEntity<?> getWitnessById(UUID id) {
         Witness witness = witnessRepository.findById(id)
                 .orElseThrow(() -> new RestException("Witness not found", HttpStatus.NOT_FOUND));
 
-        return new ApiResponse("Success",true,witness);
+        return ResponseEntity.ok().body(new ApiResponse("Success",true,witness));
     }
 
     @Override
-    public ApiResponse addWitness(WitnessDTO witnessDTO) {
+    public ResponseEntity<?> addWitness(WitnessDTO witnessDTO) {
         boolean existsByCardNumber = witnessRepository.existsByCardNumber(witnessDTO.getCardNumber());
         if (existsByCardNumber) throw new RestException("This card number Already added",HttpStatus.CONFLICT);
 
@@ -60,11 +61,11 @@ public class WitnessServiceImpl implements WitnessService {
 
         witnessRepository.save(witness);
 
-        return new ApiResponse("Successfully Added",true);
+        return ResponseEntity.ok().body(new ApiResponse("Successfully Added",true));
     }
 
     @Override
-    public ApiResponse editWitness(UUID id, WitnessDTO witnessDTO) {
+    public ResponseEntity<?> editWitness(UUID id, WitnessDTO witnessDTO) {
         Witness witness = witnessRepository.findById(id).
                 orElseThrow(() -> new RestException("Not found", HttpStatus.NOT_FOUND));
         boolean byCardNumberAndIdNot = witnessRepository.existsByCardNumberAndIdNot(witnessDTO.getCardNumber(), id);
@@ -85,15 +86,15 @@ public class WitnessServiceImpl implements WitnessService {
         witness.setRemark(witnessDTO.getRemark());
 
         witnessRepository.save(witness);
-        return new ApiResponse("Witness Updated Successfully",true);
+        return ResponseEntity.ok().body(new ApiResponse("Witness Updated Successfully",true));
 
     }
 
     @Override
-    public ApiResponse deleteWitness(UUID id) {
+    public ResponseEntity<?> deleteWitness(UUID id) {
         try {
             witnessRepository.deleteById(id);
-            return new ApiResponse("Successfully deleted", true);
+            return ResponseEntity.ok(new ApiResponse("Successfully deleted", true));
         } catch (Exception e) {
             throw new RestException("Witness Not found", HttpStatus.NOT_FOUND);
         }

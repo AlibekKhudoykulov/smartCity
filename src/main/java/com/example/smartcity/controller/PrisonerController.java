@@ -3,6 +3,7 @@ package com.example.smartcity.controller;
 import com.example.smartcity.service.impl.PrisonerServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.PrisonerDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,41 +13,37 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/prisoner")
+@RequiredArgsConstructor
 public class PrisonerController {
 
-    @Autowired
-    private PrisonerServiceImpl prisonerService;
+    private final PrisonerServiceImpl prisonerService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<?> getAll(){
-        ApiResponse prisoners = prisonerService.getAllArrestedPeople();
-        return ResponseEntity.status(prisoners.isSuccess()?200:404).body(prisoners);
+        return prisonerService.getAllArrestedPeople();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable UUID id){
-        ApiResponse prisoner = prisonerService.getPrisonerById(id);
-        return ResponseEntity.status(prisoner.isSuccess()?200:404).body(prisoner);
+        return prisonerService.getPrisonerById(id);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
     public ResponseEntity<?> add(@RequestBody PrisonerDTO prisonerDTO){
-        ApiResponse prisoner = prisonerService.addPrisoner(prisonerDTO);
-        return ResponseEntity.status(prisoner.isSuccess()?201:400).body(prisoner);
+        return prisonerService.addPrisoner(prisonerDTO);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable UUID id,@RequestBody PrisonerDTO prisonerDTO){
-        ApiResponse prisoner = prisonerService.editPrisoner(id,prisonerDTO);
-        return ResponseEntity.status(prisoner.isSuccess()?201:400).body(prisoner);
+        return prisonerService.editPrisoner(id,prisonerDTO);
     }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id){
-        ApiResponse prisoner = prisonerService.deletePrisoner(id);
-        return ResponseEntity.status(prisoner.isSuccess()?200:404).body(prisoner);
+        return prisonerService.deletePrisoner(id);
     }
 }

@@ -9,6 +9,7 @@ import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.LoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,7 +38,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     }
 
     @Override
-    public ApiResponse login(LoginDTO loginDTO) {
+    public ResponseEntity<?> login(LoginDTO loginDTO) {
          try {
             Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     loginDTO.getUsername(),
@@ -45,9 +46,9 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
             ));
             User user = (User) authenticate.getPrincipal();
             String token = jwtProvider.generateTokenAdmin(user.getUsername());
-            return new ApiResponse("Token", true, token);
+            return ResponseEntity.ok().body(new ApiResponse("Token", true, token));
         } catch (BadCredentialsException badCredentialsException) {
-            return new ApiResponse("Password or login incorrect!", false);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse("Password or login incorrect!", false));
         }
     }
 }
