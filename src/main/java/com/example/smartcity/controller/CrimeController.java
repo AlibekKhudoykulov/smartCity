@@ -5,6 +5,7 @@ import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.CrimeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class CrimeController {
     @Autowired
     private CrimeServiceImpl crimeService;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<?> getAll(){
         ApiResponse allCrimes = crimeService.getAllCrimes();
@@ -34,12 +36,13 @@ public class CrimeController {
         return ResponseEntity.status(crimeById.isSuccess()?201:400).body(crimeById);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> editCrime(@PathVariable UUID id,@RequestBody CrimeDTO crimeDTO){
         ApiResponse crime = crimeService.editCrime(id,crimeDTO);
         return ResponseEntity.status(crime.isSuccess()?201:400).body(crime);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCrime(@PathVariable UUID id){
         ApiResponse crimeById = crimeService.deleteCrime(id);

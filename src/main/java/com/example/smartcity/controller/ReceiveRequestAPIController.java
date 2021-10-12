@@ -23,11 +23,13 @@ public class ReceiveRequestAPIController {
     }
 
     @PostMapping("/askOfficer")
+    @AuthorizeRequest
     public ResponseEntity<?> askOfficerToMorgueRequest(@RequestBody MorgueRequestDTO morgueRequestDTO){
         return receiveRequestAPIService.askPoliceOfficerForMorgue(morgueRequestDTO);
     }
 
     @PostMapping("/blockingAccount")
+    @AuthorizeRequest
     public ResponseEntity<?> accountBlockingFromMorgueRequest(@RequestBody MorgueRequestDTO morgueRequestDTO){
         return receiveRequestAPIService.getRequestToBlockAccountFromMorgue(morgueRequestDTO);
     }

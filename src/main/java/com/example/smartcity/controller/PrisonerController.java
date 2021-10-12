@@ -5,6 +5,7 @@ import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.PrisonerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class PrisonerController {
     @Autowired
     private PrisonerServiceImpl prisonerService;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<?> getAll(){
         ApiResponse prisoners = prisonerService.getAllArrestedPeople();
@@ -28,18 +30,20 @@ public class PrisonerController {
         return ResponseEntity.status(prisoner.isSuccess()?200:404).body(prisoner);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
     public ResponseEntity<?> add(@RequestBody PrisonerDTO prisonerDTO){
         ApiResponse prisoner = prisonerService.addPrisoner(prisonerDTO);
         return ResponseEntity.status(prisoner.isSuccess()?201:400).body(prisoner);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable UUID id,@RequestBody PrisonerDTO prisonerDTO){
         ApiResponse prisoner = prisonerService.editPrisoner(id,prisonerDTO);
         return ResponseEntity.status(prisoner.isSuccess()?201:400).body(prisoner);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id){
         ApiResponse prisoner = prisonerService.deletePrisoner(id);

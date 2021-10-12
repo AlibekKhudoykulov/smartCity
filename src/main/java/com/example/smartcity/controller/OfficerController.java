@@ -5,6 +5,7 @@ import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.OfficerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class OfficerController {
     @Autowired
     private OfficerServiceImpl officerService;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<?> getAll(){
         ApiResponse allOfficers = officerService.getAllOfficers();
@@ -28,18 +30,21 @@ public class OfficerController {
         return ResponseEntity.status(officer.isSuccess()?200:404).body(officer);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
     public ResponseEntity<?> add(@RequestBody OfficerDTO officerDTO){
         ApiResponse officer = officerService.addOfficer(officerDTO);
         return ResponseEntity.status(officer.isSuccess()?201:400).body(officer);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable UUID id,@RequestBody OfficerDTO officerDTO){
         ApiResponse officer = officerService.editOfficer(id,officerDTO);
         return ResponseEntity.status(officer.isSuccess()?201:400).body(officer);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id){
         ApiResponse officer = officerService.deleteOfficer(id);

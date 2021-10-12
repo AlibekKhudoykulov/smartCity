@@ -18,7 +18,7 @@ public class PoliceStationController {
     private PoliceStationServiceImpl policeStationService;
 
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<?> getAll(){
         ApiResponse policeStation = policeStationService.getAllStations();
@@ -31,18 +31,21 @@ public class PoliceStationController {
         return ResponseEntity.status(policeStation.isSuccess()?200:404).body(policeStation);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
     public ResponseEntity<?> add(@RequestBody PoliceStationDTO policeStationDTO){
         ApiResponse policeStation = policeStationService.addStation(policeStationDTO);
         return ResponseEntity.status(policeStation.isSuccess()?201:400).body(policeStation);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable UUID id,@RequestBody PoliceStationDTO policeStationDTO){
         ApiResponse policeStation = policeStationService.editStation(id,policeStationDTO);
         return ResponseEntity.status(policeStation.isSuccess()?201:400).body(policeStation);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id){
         ApiResponse policeStation = policeStationService.deleteStation(id);
