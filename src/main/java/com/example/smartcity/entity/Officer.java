@@ -27,7 +27,7 @@ public class Officer extends AbsEntity {
 
     private Date birthDate;
 
-    private String certificate;
+    private long certificate;
 
     @Enumerated(EnumType.STRING)
     private OfficerRank rank;

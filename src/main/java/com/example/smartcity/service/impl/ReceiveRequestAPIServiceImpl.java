@@ -6,9 +6,11 @@ import com.example.smartcity.entity.User;
 import com.example.smartcity.entity.enums.OfficerRank;
 import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.ApiResponse;
+import com.example.smartcity.payload.PoliceStationDTO;
 import com.example.smartcity.payload.VictimDTO;
 import com.example.smartcity.payload.requestDTO.CityManagementRequestDTO;
 import com.example.smartcity.payload.requestDTO.MorgueRequestDTO;
+import com.example.smartcity.payload.responseDTO.OfficerResponseDTO;
 import com.example.smartcity.repository.MorgueRequestRepository;
 import com.example.smartcity.repository.OfficerRepository;
 import com.example.smartcity.repository.UserRepository;
@@ -30,6 +32,7 @@ public class ReceiveRequestAPIServiceImpl implements ReceiveRequestAPIService {
     private final UserRepository userRepository;
     private final MorgueRequestRepository morgueRequestRepository;
     private final VictimServiceImpl victimService;
+    private final CitizenExternalApiServiceImpl citizenExternalApiService;
 
 
     @Override
@@ -59,17 +62,19 @@ public class ReceiveRequestAPIServiceImpl implements ReceiveRequestAPIService {
             for (Officer officer : officerRepository.findAllByRank(OfficerRank.EXPERT)) {
                 Optional<MorgueRequest> byOfficerCardNumber = morgueRequestRepository.findByOfficer(officer);
                 if (!byOfficerCardNumber.isPresent()) {
+                    OfficerResponseDTO officerResponseDTO = citizenExternalApiService.sendOfficer(officer);
                     morgueRequest.setOfficer(officer);
                     morgueRequest.setOfficerCardNumber(officer.getCardNumber());
                     morgueRequestRepository.save(morgueRequest);
-                    return ResponseEntity.status(200).body(officer);
+                    return ResponseEntity.status(200).body(officerResponseDTO);
                 } else {
                     boolean endExamination = byOfficerCardNumber.get().isEndExamination();
                     if (endExamination) {
+                        OfficerResponseDTO officerResponseDTO = citizenExternalApiService.sendOfficer(officer);
                         morgueRequest.setOfficer(officer);
                         morgueRequest.setOfficerCardNumber(officer.getCardNumber());
                         morgueRequestRepository.save(morgueRequest);
-                        return ResponseEntity.status(200).body(officer);
+                        return ResponseEntity.status(200).body(officerResponseDTO);
                     }
                 }
             }

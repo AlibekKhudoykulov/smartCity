@@ -3,6 +3,8 @@ package com.example.smartcity.service.impl;
 import com.example.smartcity.entity.Crime;
 import com.example.smartcity.entity.Officer;
 import com.example.smartcity.exception.RestException;
+import com.example.smartcity.payload.PoliceStationDTO;
+import com.example.smartcity.payload.responseDTO.OfficerResponseDTO;
 import com.example.smartcity.repository.CrimeRepository;
 import com.example.smartcity.service.CitizenExternalApiService;
 import com.example.smartcity.payload.CitizenDTO;
@@ -81,21 +83,10 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
     }
 
     @Override
-    public String generateCertificate() {
-        StringBuilder str=new StringBuilder();
-        Random random = new Random();
-        String abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String numbers="1234567890";
-        for (int i = 0; i < 2; i++) {
-            char letter = abc.charAt(random.nextInt(abc.length()));
-            str.append(letter);
-        }
-        str.append(" ");
-        for (int i = 0; i < 8; i++) {
-            char number = numbers.charAt(random.nextInt(numbers.length()));
-            str.append(number);
-        }
-        return str.toString();
+    public long generateCertificate() {
+        Random rnd = new Random();
+        long n = 100000 + rnd.nextInt(900000);
+        return n;
     }
 
     public void sendCheckingCertificate(Officer officer){
@@ -105,17 +96,17 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
 
 
         String reqBody="{" +
-//                "\"officerId\":" + officer.getId() + "," +
-                "\"residentCardNumber\":" + officer.getCardNumber() + "," +
-                "\"infoType\":" + "\"CERTIFICATE\"" + "," +
-                "\"date\":" + "\""+strDate +"\"" +
+                "\"officerId\":" + "\""+officer.getId()+"\"" + "," +
+                "\"officerCardNumber\":" + officer.getCardNumber() + "," +
+                "\"officerFullName\":" + "\""+officer.getFirstName()+" "+officer.getLastName() +"\""+ "," +
+                "\"certificateCode\":" +officer.getCertificate() +
                 "}";
 
         try {
             httpRequestService.makePOSTHTTPCallUsingHMAC(
                     "POLICE",
                     "check_certificate",
-                    "http://citymanagementfull-env.eba-tixcjyas.us-east-2.elasticbeanstalk.com/api/v1/request/police",
+                    "http://citymanagementfull-env.eba-tixcjyas.us-east-2.elasticbeanstalk.com/api/v1/request/police/certificate",
                     "policeKey",
                     reqBody
             );
@@ -194,5 +185,48 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
         }catch (WebClientResponseException webClientResponseException){
             throw new RestException("Liberation didn't send for opening account but saved in database",HttpStatus.CONFLICT);
         }
+    }
+    public OfficerResponseDTO sendOfficer(Officer officer){
+        PoliceStationDTO policeStationDTO = null;
+        if (officer.getPoliceStation()!=null){
+            policeStationDTO=new PoliceStationDTO(
+                    officer.getPoliceStation().getName(),
+                    officer.getPoliceStation().getPhoneNumber(),
+                    officer.getPoliceStation().getAddress(),
+                    officer.getPoliceStation().getRemark()
+            );
+        }
+        OfficerResponseDTO officerResponseDTO=OfficerResponseDTO.builder()
+                .uuid(officer.getId())
+                .cardNumber(officer.getCardNumber())
+                .firstName(officer.getFirstName())
+                .lastName(officer.getLastName())
+                .rank(officer.getRank())
+                .policeStation(policeStationDTO)
+                .build();
+        return officerResponseDTO;
+    }
+    public OfficerResponseDTO forResponseOfficer(Officer officer){
+        PoliceStationDTO policeStationDTO = null;
+        if (officer.getPoliceStation()!=null){
+            policeStationDTO=new PoliceStationDTO(
+                    officer.getPoliceStation().getName(),
+                    officer.getPoliceStation().getPhoneNumber(),
+                    officer.getPoliceStation().getAddress(),
+                    officer.getPoliceStation().getRemark()
+            );
+        }
+        OfficerResponseDTO officerResponseDTO=OfficerResponseDTO.builder()
+                .uuid(officer.getId())
+                .cardNumber(officer.getCardNumber())
+                .firstName(officer.getFirstName())
+                .lastName(officer.getLastName())
+                .rank(officer.getRank())
+                .birthDate(officer.getBirthDate())
+                .certificate(officer.getCertificate())
+                .photoId(officer.getPhotoId())
+                .policeStation(policeStationDTO)
+                .build();
+        return officerResponseDTO;
     }
 }

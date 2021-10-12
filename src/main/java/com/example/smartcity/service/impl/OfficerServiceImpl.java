@@ -4,6 +4,7 @@ import com.example.smartcity.entity.Officer;
 import com.example.smartcity.entity.PoliceStation;
 import com.example.smartcity.payload.CitizenDTO;
 import com.example.smartcity.payload.UserDTO;
+import com.example.smartcity.payload.responseDTO.OfficerResponseDTO;
 import com.example.smartcity.repository.OfficerRepository;
 import com.example.smartcity.repository.PoliceStationRepository;
 import com.example.smartcity.repository.UserRepository;
@@ -39,8 +40,8 @@ public class OfficerServiceImpl implements OfficerService {
     public ApiResponse getOfficerById(UUID id) {
         Officer officer = officerRepository.findById(id)
                 .orElseThrow(() -> new RestException("Officer not found", HttpStatus.NOT_FOUND));
-
-        return new ApiResponse("success", true, officer);
+        OfficerResponseDTO officerResponseDTO = citizenExternalApiService.forResponseOfficer(officer);
+        return new ApiResponse("success", true, officerResponseDTO);
     }
 
     @Override
@@ -48,7 +49,8 @@ public class OfficerServiceImpl implements OfficerService {
         Officer officer = officerRepository.findByCardNumber(cardNumber)
                 .orElseThrow(() -> new RestException("Officer not found", HttpStatus.NOT_FOUND));
 
-        return new ApiResponse("Success", true, officer);
+        OfficerResponseDTO officerResponseDTO = citizenExternalApiService.forResponseOfficer(officer);
+        return new ApiResponse("Success", true, officerResponseDTO);
     }
 
     @Override
