@@ -72,6 +72,7 @@ public class OfficerServiceImpl implements OfficerService {
                 citizenByCardNumber.getBirthDate(),
                 citizenExternalApiService.generateCertificate(),
                 officerDTO.getRank(),
+                citizenByCardNumber.getPhotoId(),
                 policeStation
         );
 

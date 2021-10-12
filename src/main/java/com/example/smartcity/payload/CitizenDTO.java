@@ -3,6 +3,7 @@ package com.example.smartcity.payload;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 public class CitizenDTO {
@@ -14,4 +15,6 @@ public class CitizenDTO {
     private String surname;
 
     private Date birthDate;
+
+    private UUID photoId;
 }

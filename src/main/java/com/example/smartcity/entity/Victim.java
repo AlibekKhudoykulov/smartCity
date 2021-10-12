@@ -11,6 +11,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.ManyToMany;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -30,6 +31,8 @@ public class Victim extends AbsEntity {
     private Date deathDate;
 
     private String remark;
+
+    private UUID photoId;
 
     @ManyToMany
     private List<Crime> crime;

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -30,6 +31,8 @@ public class Officer extends AbsEntity {
 
     @Enumerated(EnumType.STRING)
     private OfficerRank rank;
+
+    private UUID photoId;
 
     @ManyToOne
     private PoliceStation policeStation;

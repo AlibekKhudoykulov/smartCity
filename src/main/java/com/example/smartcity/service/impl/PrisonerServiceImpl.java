@@ -54,6 +54,7 @@ public class PrisonerServiceImpl implements PrisonerService {
                 prisonerDTO.getStartingDate(),
                 prisonerDTO.getEndingDate(),
                 true,
+                citizenByCardNumber.getPhotoId(),
                 crimeList
         );
 
@@ -86,6 +87,7 @@ public class PrisonerServiceImpl implements PrisonerService {
         prisoner.setPrisonDuration(prisonerDTO.getPrisonDuration());
         prisoner.setStartingDate(prisonerDTO.getStartingDate());
         prisoner.setEndingDate(prisonerDTO.getEndingDate());
+        prisoner.setPhotoId(citizenByCardNumber.getPhotoId());
 
         if (prisonerDTO.isInPrison()){
             prisoner.setInPrison(prisonerDTO.isInPrison());

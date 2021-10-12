@@ -56,6 +56,7 @@ public class VictimServiceImpl implements VictimService {
                 citizenByCardNumber.getBirthDate(),
                 victimDTO.getDeathDate(),
                 victimDTO.getRemark(),
+                citizenByCardNumber.getPhotoId(),
                 crimeList
         );
 
@@ -84,6 +85,7 @@ public class VictimServiceImpl implements VictimService {
         victim.setName(citizenByCardNumber.getFirstName());
         victim.setSurname(citizenByCardNumber.getSurname());
         victim.setBirthDate(citizenByCardNumber.getBirthDate());
+        victim.setPhotoId(citizenByCardNumber.getPhotoId());
         victim.setRemark(victimDTO.getRemark());
 
         victimRepository.save(victim);

@@ -54,6 +54,7 @@ public class WitnessServiceImpl implements WitnessService {
                 citizenByCardNumber.getBirthDate(),
                 witnessDTO.getPhoneNumber(),
                 witnessDTO.getRemark(),
+                citizenByCardNumber.getPhotoId(),
                 crimeList
         );
 
@@ -79,6 +80,7 @@ public class WitnessServiceImpl implements WitnessService {
         witness.setFirstName(citizenByCardNumber.getFirstName());
         witness.setSurname(citizenByCardNumber.getSurname());
         witness.setBirthDate(citizenByCardNumber.getBirthDate());
+        witness.setPhotoId(citizenByCardNumber.getPhotoId());
         witness.setPhoneNumber(witnessDTO.getPhoneNumber());
         witness.setRemark(witnessDTO.getRemark());
 

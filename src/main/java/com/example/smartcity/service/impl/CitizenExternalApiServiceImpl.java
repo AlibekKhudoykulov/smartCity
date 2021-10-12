@@ -51,6 +51,9 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
             if (s1.replaceAll("\"", "").startsWith("lastName")) {
                 citizenDTO.setSurname(s1.substring(12, s1.length() - 1));
             }
+            if (s1.replaceAll("\"", "").startsWith("photoId")) {
+                citizenDTO.setPhotoId(UUID.fromString(s1.substring(11, s1.length() - 1)));
+            }
             if (s1.replaceAll("\"", "").startsWith("birthDate")) {
                 try {
                     String substring = s1.substring(13, s1.length() - 1);

@@ -11,6 +11,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.ManyToMany;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -34,6 +35,8 @@ public class Prisoner extends AbsEntity {
     private Date endingDate;
 
     private boolean inPrison;
+
+    private UUID photoId;
 
     @ManyToMany
     private List<Crime> crime;
