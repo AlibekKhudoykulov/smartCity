@@ -93,12 +93,11 @@ public class ReceiveRequestAPIServiceImpl implements ReceiveRequestAPIService {
         morgueRequest.setEndExamination(true);
         MorgueRequest save = morgueRequestRepository.save(morgueRequest);
 
-        VictimDTO victimDTO = new VictimDTO(
-                save.getCorpseCardNumber(),
-                save.getDeathDate(),
-                save.getCauses(),
-                true
-        );
+        VictimDTO victimDTO = new VictimDTO();
+        victimDTO.setCardNumber(save.getCorpseCardNumber());
+        victimDTO.setDeathDate(save.getDeathDate());
+        victimDTO.setRemark(victimDTO.getRemark());
+        victimDTO.setDead(true);
 
         ResponseEntity<?> responseEntity = victimService.addVictim(victimDTO);
         return ResponseEntity.status(responseEntity.getStatusCode().equals(HttpStatus.OK) ? HttpStatus.OK : HttpStatus.CONFLICT).

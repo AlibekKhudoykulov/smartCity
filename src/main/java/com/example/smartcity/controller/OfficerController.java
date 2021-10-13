@@ -16,7 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OfficerController {
 
-    private OfficerServiceImpl officerService;
+    private final OfficerServiceImpl officerService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping

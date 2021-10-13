@@ -2,6 +2,7 @@ package com.example.smartcity.service.impl;
 
 import com.example.smartcity.security.hmac.HMACUtil;
 import com.example.smartcity.service.HTTPRequestService;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +14,10 @@ import java.net.URI;
 import java.util.Date;
 
 @Service
+@RequiredArgsConstructor
 public class HTTPRequestServiceImpl implements HTTPRequestService {
 
     private final HMACUtil hmacUtil;
-
-    public HTTPRequestServiceImpl(HMACUtil hmacUtil) {
-        this.hmacUtil = hmacUtil;
-    }
 
     @Override
     @SneakyThrows
