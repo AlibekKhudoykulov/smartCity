@@ -18,7 +18,16 @@ public class VictimDTO {
 
     private String remark;
 
+    private boolean isDead;
+
     private List<UUID> crimes;
+
+    public VictimDTO(long cardNumber, Date deathDate, String remark, boolean isDead) {
+        this.cardNumber = cardNumber;
+        this.deathDate = deathDate;
+        this.remark = remark;
+        this.isDead = isDead;
+    }
 
     public VictimDTO(long cardNumber, Date deathDate, String remark) {
         this.cardNumber = cardNumber;

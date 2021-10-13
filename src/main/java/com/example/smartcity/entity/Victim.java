@@ -34,6 +34,8 @@ public class Victim extends AbsEntity {
 
     private UUID photoId;
 
+    private boolean isDead;
+
     @ManyToMany
     private List<Crime> crime;
 

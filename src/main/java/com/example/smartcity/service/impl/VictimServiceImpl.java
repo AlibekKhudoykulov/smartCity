@@ -58,12 +58,13 @@ public class VictimServiceImpl implements VictimService {
                 victimDTO.getDeathDate(),
                 victimDTO.getRemark(),
                 citizenByCardNumber.getPhotoId(),
+                victimDTO.isDead(),
                 crimeList
         );
 
-        citizenExternalApiService.sendDeathPersonToCityManagement(victimDTO.getCardNumber());
-        victimRepository.save(victim);
+        if (victimDTO.isDead()) citizenExternalApiService.sendDeathPersonToCityManagement(victimDTO.getCardNumber());
 
+        victimRepository.save(victim);
         return ResponseEntity.ok().body(new  ApiResponse("Victim Saved Successfully",true));
     }
 
@@ -88,6 +89,7 @@ public class VictimServiceImpl implements VictimService {
         victim.setBirthDate(citizenByCardNumber.getBirthDate());
         victim.setPhotoId(citizenByCardNumber.getPhotoId());
         victim.setRemark(victimDTO.getRemark());
+        victim.setDead(victimDTO.isDead());
 
         victimRepository.save(victim);
         return ResponseEntity.ok().body(new ApiResponse("Victim Updated Successfully",true));

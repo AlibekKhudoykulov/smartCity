@@ -96,7 +96,8 @@ public class ReceiveRequestAPIServiceImpl implements ReceiveRequestAPIService {
         VictimDTO victimDTO = new VictimDTO(
                 save.getCorpseCardNumber(),
                 save.getDeathDate(),
-                save.getCauses()
+                save.getCauses(),
+                true
         );
 
         ResponseEntity<?> responseEntity = victimService.addVictim(victimDTO);
