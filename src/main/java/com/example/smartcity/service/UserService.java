@@ -11,7 +11,7 @@ public interface UserService {
 
     ResponseEntity<?> getUserById(UUID id);
 
-    ResponseEntity<?> getAllUsers();
+    ResponseEntity<?> getAllUsers(Integer page);
 
     ResponseEntity<?> addUser(UserDTO userDTO);
 

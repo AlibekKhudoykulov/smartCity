@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface PoliceStationService {
 
-    ResponseEntity<?> getAllStations();
+    ResponseEntity<?> getAllStations(Integer page);
 
     ResponseEntity<?> getStationById(UUID id);
 

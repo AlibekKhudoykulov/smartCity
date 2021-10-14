@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 public interface OfficerService {
 
-    ResponseEntity<?> getAllOfficers();
+    ResponseEntity<?> getAllOfficers(Integer page);
 
     ResponseEntity<?> getOfficerById(UUID id);
 

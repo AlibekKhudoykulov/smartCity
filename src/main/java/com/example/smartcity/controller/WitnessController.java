@@ -20,8 +20,8 @@ public class WitnessController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
-    public ResponseEntity<?> getAll(){
-        return witnessService.getAllWitnesses();
+    public ResponseEntity<?> getAll(@RequestParam Integer page){
+        return witnessService.getAllWitnesses(page);
     }
 
     @GetMapping("/{id}")

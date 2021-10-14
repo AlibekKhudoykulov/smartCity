@@ -13,7 +13,7 @@ public interface WitnessService {
 
     ResponseEntity<?> getWitnessById(UUID id);
 
-    ResponseEntity<?> getAllWitnesses();
+    ResponseEntity<?> getAllWitnesses(Integer page);
 
     ResponseEntity<?> addWitness(WitnessDTO witnessDTO);
 

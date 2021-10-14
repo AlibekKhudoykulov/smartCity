@@ -20,8 +20,8 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
-    public ResponseEntity<?> getAll(){
-        return userService.getAllUsers();
+    public ResponseEntity<?> getAll(@RequestParam Integer page){
+        return userService.getAllUsers(page);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

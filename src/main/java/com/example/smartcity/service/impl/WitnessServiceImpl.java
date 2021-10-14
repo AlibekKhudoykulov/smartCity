@@ -10,12 +10,15 @@ import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.WitnessDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -27,8 +30,9 @@ public class WitnessServiceImpl implements WitnessService {
     private final CrimeRepository crimeRepository;
 
     @Override
-    public ResponseEntity<?> getAllWitnesses() {
-        List<Witness> witnesses = witnessRepository.findAll();
+    public ResponseEntity<?> getAllWitnesses(Integer page) {
+        Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
+        Page<Witness> witnesses = witnessRepository.findAll(pageableAndSortedByTime);
         return ResponseEntity.ok().body(new ApiResponse("Success",true,witnesses));
     }
 

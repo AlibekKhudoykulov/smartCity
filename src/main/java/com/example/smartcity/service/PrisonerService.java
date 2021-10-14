@@ -14,7 +14,7 @@ public interface PrisonerService {
 
     ResponseEntity<?> getPrisonerById(UUID id);
 
-    ResponseEntity<?> getAllArrestedPeople();
+    ResponseEntity<?> getAllArrestedPeople(Integer page);
 
     ResponseEntity<?> addPrisoner(PrisonerDTO prisonerDTO);
 

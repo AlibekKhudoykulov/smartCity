@@ -2,7 +2,6 @@ package com.example.smartcity.service.impl;
 
 import com.example.smartcity.entity.Crime;
 import com.example.smartcity.entity.Victim;
-import com.example.smartcity.entity.Witness;
 import com.example.smartcity.payload.CitizenDTO;
 import com.example.smartcity.repository.VictimRepository;
 import com.example.smartcity.service.VictimService;
@@ -10,14 +9,16 @@ import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.VictimDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,8 +29,9 @@ public class VictimServiceImpl implements VictimService {
     private final CitizenExternalApiServiceImpl citizenExternalApiService;
 
     @Override
-    public ResponseEntity<?> getAllVictims() {
-        List<Victim> all = victimRepository.findAll();
+    public ResponseEntity<?> getAllVictims(Integer page) {
+        Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
+        Page<Victim> all = victimRepository.findAll(pageableAndSortedByTime);
         return ResponseEntity.ok().body(new ApiResponse("Success",true,all));
     }
 

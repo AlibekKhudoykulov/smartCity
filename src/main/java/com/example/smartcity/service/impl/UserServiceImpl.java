@@ -9,7 +9,10 @@ import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.UserDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,8 +29,9 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
 
     @Override
-    public ResponseEntity<?> getAllUsers() {
-        List<User> allUsers = userRepository.findAll();
+    public ResponseEntity<?> getAllUsers(Integer page) {
+        Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
+        Page<User> allUsers = userRepository.findAll(pageableAndSortedByTime);
         return ResponseEntity.ok().body(new ApiResponse("Success",true,allUsers));
     }
 

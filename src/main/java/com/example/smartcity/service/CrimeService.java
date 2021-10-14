@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 public interface CrimeService {
 
-    ResponseEntity<?> getAllCrimes();
+    ResponseEntity<?> getAllCrimes(Integer page);
 
     ResponseEntity<?> getCrimeById(UUID id);
 

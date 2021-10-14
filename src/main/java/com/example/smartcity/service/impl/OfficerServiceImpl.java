@@ -13,11 +13,14 @@ import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.OfficerDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,8 +35,9 @@ public class OfficerServiceImpl implements OfficerService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<?> getAllOfficers() {
-        List<Officer> officerList = officerRepository.findAll();
+    public ResponseEntity<?> getAllOfficers(Integer page) {
+        Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
+        Page<Officer> officerList = officerRepository.findAll(pageableAndSortedByTime);
         return ResponseEntity.ok().body(new ApiResponse("Officer list", true, officerList));
     }
 

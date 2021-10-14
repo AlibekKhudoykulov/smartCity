@@ -7,6 +7,10 @@ import com.example.smartcity.service.CrimeService;
 import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,8 +28,9 @@ public class CrimeServiceImpl implements CrimeService {
 
 
     @Override
-    public ResponseEntity<?> getAllCrimes() {
-        List<Crime> allCrimes = crimeRepository.findAll();
+    public ResponseEntity<?> getAllCrimes(Integer page) {
+        Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
+        Page<Crime> allCrimes = crimeRepository.findAll(pageableAndSortedByTime);
         return ResponseEntity.ok().body(new ApiResponse("Success", true, allCrimes));
     }
 

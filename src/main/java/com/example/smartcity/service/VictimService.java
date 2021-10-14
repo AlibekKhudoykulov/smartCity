@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 public interface VictimService {
 
-    ResponseEntity<?> getAllVictims();
+    ResponseEntity<?> getAllVictims(Integer page);
 
     ResponseEntity<?> getVictimById(UUID id);
 

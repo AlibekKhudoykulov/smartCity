@@ -2,7 +2,6 @@ package com.example.smartcity.service.impl;
 
 import com.example.smartcity.entity.Crime;
 import com.example.smartcity.entity.Prisoner;
-import com.example.smartcity.repository.CrimeRepository;
 import com.example.smartcity.repository.PrisonerRepository;
 import com.example.smartcity.service.PrisonerService;
 import com.example.smartcity.exception.RestException;
@@ -10,7 +9,10 @@ import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.CitizenDTO;
 import com.example.smartcity.payload.PrisonerDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,8 +28,9 @@ public class PrisonerServiceImpl implements PrisonerService {
     private final CitizenExternalApiServiceImpl citizenExternalApiService;
 
     @Override
-    public ResponseEntity<?> getAllArrestedPeople() {
-        List<Prisoner> prisoners = prisonerRepository.findAll();
+    public ResponseEntity<?> getAllArrestedPeople(Integer page) {
+        Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
+        Page<Prisoner> prisoners = prisonerRepository.findAll(pageableAndSortedByTime);
         return ResponseEntity.ok().body(new ApiResponse("Success", true, prisoners));
     }
 

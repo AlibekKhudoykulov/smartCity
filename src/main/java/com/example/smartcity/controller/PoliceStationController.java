@@ -20,8 +20,8 @@ public class PoliceStationController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
-    public ResponseEntity<?> getAll(){
-        return policeStationService.getAllStations();
+    public ResponseEntity<?> getAll(@RequestParam Integer page){
+        return policeStationService.getAllStations(page);
     }
 
     @GetMapping("/{id}")
