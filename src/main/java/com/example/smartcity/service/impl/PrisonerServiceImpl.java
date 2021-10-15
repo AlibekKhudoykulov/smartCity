@@ -2,6 +2,7 @@ package com.example.smartcity.service.impl;
 
 import com.example.smartcity.entity.Crime;
 import com.example.smartcity.entity.Prisoner;
+import com.example.smartcity.payload.responseDTO.PrisonerResponseDTO;
 import com.example.smartcity.repository.PrisonerRepository;
 import com.example.smartcity.service.PrisonerService;
 import com.example.smartcity.exception.RestException;
@@ -38,8 +39,8 @@ public class PrisonerServiceImpl implements PrisonerService {
     public ResponseEntity<?> getPrisonerById(UUID id) {
         Prisoner prisoner = prisonerRepository.findById(id)
                 .orElseThrow(() -> new RestException("Prisoner not found", HttpStatus.NOT_FOUND));
-
-        return ResponseEntity.ok().body(new ApiResponse("Success", true, prisoner));
+        PrisonerResponseDTO prisonerResponseDTO = citizenExternalApiService.forResponsePrisoner(prisoner);
+        return ResponseEntity.ok().body(new ApiResponse("Success", true, prisonerResponseDTO));
     }
 
     @Override

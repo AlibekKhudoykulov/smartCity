@@ -2,6 +2,7 @@ package com.example.smartcity.service.impl;
 
 import com.example.smartcity.entity.*;
 import com.example.smartcity.entity.enums.CrimeReportStatus;
+import com.example.smartcity.payload.responseDTO.CrimeResponseDTO;
 import com.example.smartcity.repository.*;
 import com.example.smartcity.service.CrimeService;
 import com.example.smartcity.exception.RestException;
@@ -25,6 +26,7 @@ public class CrimeServiceImpl implements CrimeService {
     private final CrimeRepository crimeRepository;
     private final PoliceStationRepository policeStationRepository;
     private final OfficerRepository officerRepository;
+    private final CitizenExternalApiServiceImpl citizenExternalApiService;
 
 
     @Override
@@ -38,7 +40,8 @@ public class CrimeServiceImpl implements CrimeService {
     public ResponseEntity<?> getCrimeById(UUID id) {
         Crime byId = crimeRepository.findById(id)
                 .orElseThrow(() -> new RestException("Crime not found", HttpStatus.NOT_FOUND));
-        return ResponseEntity.ok().body(new ApiResponse("Success", true, byId));
+        CrimeResponseDTO crimeResponseDTO = citizenExternalApiService.forResponseCrime(byId);
+        return ResponseEntity.ok().body(new ApiResponse("Success", true, crimeResponseDTO));
     }
 
     @Override

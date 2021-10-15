@@ -3,6 +3,7 @@ package com.example.smartcity.service.impl;
 import com.example.smartcity.entity.Crime;
 import com.example.smartcity.entity.Witness;
 import com.example.smartcity.payload.CitizenDTO;
+import com.example.smartcity.payload.responseDTO.WitnessResponseDTO;
 import com.example.smartcity.repository.CrimeRepository;
 import com.example.smartcity.repository.WitnessRepository;
 import com.example.smartcity.service.WitnessService;
@@ -40,8 +41,8 @@ public class WitnessServiceImpl implements WitnessService {
     public ResponseEntity<?> getWitnessById(UUID id) {
         Witness witness = witnessRepository.findById(id)
                 .orElseThrow(() -> new RestException("Witness not found", HttpStatus.NOT_FOUND));
-
-        return ResponseEntity.ok().body(new ApiResponse("Success",true,witness));
+        WitnessResponseDTO witnessResponseDTO = citizenExternalApiService.forResponseWitness(witness);
+        return ResponseEntity.ok().body(new ApiResponse("Success",true,witnessResponseDTO));
     }
 
     @Override

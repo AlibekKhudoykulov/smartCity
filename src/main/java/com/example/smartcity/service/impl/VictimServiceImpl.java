@@ -3,6 +3,7 @@ package com.example.smartcity.service.impl;
 import com.example.smartcity.entity.Crime;
 import com.example.smartcity.entity.Victim;
 import com.example.smartcity.payload.CitizenDTO;
+import com.example.smartcity.payload.responseDTO.VictimResponseDTO;
 import com.example.smartcity.repository.VictimRepository;
 import com.example.smartcity.service.VictimService;
 import com.example.smartcity.exception.RestException;
@@ -39,8 +40,8 @@ public class VictimServiceImpl implements VictimService {
     public ResponseEntity<?> getVictimById(UUID id) {
         Victim victim = victimRepository.findById(id)
                 .orElseThrow(() -> new RestException("Victim not found", HttpStatus.NOT_FOUND));
-
-        return ResponseEntity.ok().body(new ApiResponse("Success",true, victim));
+        VictimResponseDTO victimResponseDTO = citizenExternalApiService.forResponseVictim(victim);
+        return ResponseEntity.ok().body(new ApiResponse("Success",true, victimResponseDTO));
     }
 
     @Override

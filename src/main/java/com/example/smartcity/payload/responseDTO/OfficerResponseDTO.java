@@ -1,6 +1,5 @@
 package com.example.smartcity.payload.responseDTO;
 
-import com.example.smartcity.entity.PoliceStation;
 import com.example.smartcity.entity.enums.OfficerRank;
 import com.example.smartcity.payload.PoliceStationDTO;
 import lombok.AllArgsConstructor;
