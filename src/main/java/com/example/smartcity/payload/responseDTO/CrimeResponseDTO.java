@@ -33,7 +33,7 @@ public class CrimeResponseDTO {
 
     private List<OfficerResponseDTO> officers;
 
-    private PoliceStationDTO policeStation;
+    private PoliceStationResponseDTO policeStation;
 
     private CrimeReportStatus crimeReportStatus;
 

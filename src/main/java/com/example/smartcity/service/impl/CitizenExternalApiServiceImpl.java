@@ -8,6 +8,7 @@ import com.example.smartcity.repository.CrimeRepository;
 import com.example.smartcity.repository.PoliceStationRepository;
 import com.example.smartcity.service.CitizenExternalApiService;
 import com.example.smartcity.payload.CitizenDTO;
+import com.example.smartcity.service.Mapper.Mappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
     private final HTTPRequestServiceImpl httpRequestService;
     private final CrimeRepository crimeRepository;
     private final PoliceStationRepository policeStationRepository;
+    private final Mappers mappers;
 
     @Override
     public CitizenDTO getCitizenByCardNumber(long cardNumber) {
@@ -207,128 +209,10 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
                 .firstName(officer.getFirstName())
                 .lastName(officer.getLastName())
                 .rank(officer.getRank())
-                .policeStation(policeStationDTO)
+                .policeStation(mappers.forPoliceStationResponseMapper(officer.getPoliceStation()))
                 .build();
         return officerResponseDTO;
     }
 
-    public OfficerResponseDTO forResponseOfficer(Officer officer) {
-        PoliceStationDTO policeStationDTO = null;
-        if (officer.getPoliceStation() != null) {
-            policeStationDTO = new PoliceStationDTO(
-                    officer.getPoliceStation().getName(),
-                    officer.getPoliceStation().getPhoneNumber(),
-                    officer.getPoliceStation().getAddress(),
-                    officer.getPoliceStation().getRemark()
-            );
-        }
-        OfficerResponseDTO officerResponseDTO = OfficerResponseDTO.builder()
-                .uuid(officer.getId())
-                .cardNumber(officer.getCardNumber())
-                .firstName(officer.getFirstName())
-                .lastName(officer.getLastName())
-                .rank(officer.getRank())
-                .birthDate(officer.getBirthDate())
-                .certificate(officer.getCertificate())
-                .photoId(officer.getPhotoId())
-                .policeStation(policeStationDTO)
-                .build();
-        return officerResponseDTO;
-    }
 
-    public CrimeResponseDTO forResponseCrime(Crime crime) {
-
-        PoliceStationDTO policeStationDTO = null;
-        if (crime.getPoliceStation() != null) {
-            policeStationDTO = PoliceStationDTO.builder()
-                    .name(crime.getPoliceStation().getName())
-                    .address(crime.getPoliceStation().getAddress())
-                    .phoneNumber(crime.getPoliceStation().getPhoneNumber())
-                    .remark(crime.getPoliceStation().getRemark())
-                    .build();
-        }
-        List<OfficerResponseDTO> officerList = new ArrayList<>();
-        if (crime.getOfficers() != null && crime.getOfficers().size() != 0) {
-            for (Officer officer : crime.getOfficers()) {
-                officerList.add(forResponseOfficer(officer));
-            }
-        }
-
-        CrimeResponseDTO crimeResponseDTO = CrimeResponseDTO.builder()
-                .uuid(crime.getId())
-                .name(crime.getName())
-                .address(crime.getAddress())
-                .crimeTime(crime.getCrimeTime())
-                .crimeDescription(crime.getCrimeDescription())
-                .officers(officerList)
-                .policeStation(policeStationDTO)
-                .crimeReportStatus(crime.getCrimeReportStatus())
-                .crimeStatus(crime.getCrimeStatus())
-                .crimeType(crime.getCrimeType())
-                .build();
-        return crimeResponseDTO;
-    }
-
-    public WitnessResponseDTO forResponseWitness(Witness witness) {
-        List<CrimeResponseDTO> crimeResponseDTOS = new ArrayList<>();
-        for (Crime crime : witness.getCrime()) {
-            CrimeResponseDTO crimeResponseDTO = forResponseCrime(crime);
-            crimeResponseDTOS.add(crimeResponseDTO);
-        }
-        WitnessResponseDTO witnessResponseDTO = WitnessResponseDTO.builder()
-                .id(witness.getId())
-                .firstName(witness.getFirstName())
-                .surname(witness.getSurname())
-                .birthDate(witness.getBirthDate())
-                .cardNumber(witness.getCardNumber())
-                .phoneNumber(witness.getPhoneNumber())
-                .photoId(witness.getPhotoId())
-                .crime(crimeResponseDTOS)
-                .remark(witness.getRemark())
-                .build();
-
-        return witnessResponseDTO;
-    }
-
-    public VictimResponseDTO forResponseVictim(Victim victim) {
-        List<CrimeResponseDTO> crimeResponseDTOS = new ArrayList<>();
-        for (Crime crime : victim.getCrime()) {
-            CrimeResponseDTO crimeResponseDTO = forResponseCrime(crime);
-            crimeResponseDTOS.add(crimeResponseDTO);
-        }
-        VictimResponseDTO victimResponseDTO = VictimResponseDTO.builder()
-                .id(victim.getId())
-                .name(victim.getName())
-                .surname(victim.getSurname())
-                .birthDate(victim.getBirthDate())
-                .cardNumber(victim.getCardNumber())
-                .deathDate(victim.getDeathDate())
-                .photoId(victim.getPhotoId())
-                .crimes(crimeResponseDTOS)
-                .remark(victim.getRemark())
-                .build();
-
-        return victimResponseDTO;
-    }
-    public PrisonerResponseDTO forResponsePrisoner(Prisoner prisoner) {
-        List<CrimeResponseDTO> crimeResponseDTOS = new ArrayList<>();
-        for (Crime crime : prisoner.getCrime()) {
-            CrimeResponseDTO crimeResponseDTO = forResponseCrime(crime);
-            crimeResponseDTOS.add(crimeResponseDTO);
-        }
-        PrisonerResponseDTO prisonerResponseDTO = PrisonerResponseDTO.builder()
-                .id(prisoner.getId())
-                .firstName(prisoner.getFirstName())
-                .surname(prisoner.getSurname())
-                .birthDate(prisoner.getBirthDate())
-                .cardNumber(prisoner.getCardNumber())
-                .prisonDuration(prisoner.getPrisonDuration())
-                .photoId(prisoner.getPhotoId())
-                .startingDate(prisoner.getStartingDate())
-                .endingDate(prisoner.getEndingDate())
-                .crimes(crimeResponseDTOS)
-                .build();
-
-        return prisonerResponseDTO;
-    }
 }

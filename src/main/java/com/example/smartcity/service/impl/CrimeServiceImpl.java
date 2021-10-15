@@ -7,6 +7,7 @@ import com.example.smartcity.repository.*;
 import com.example.smartcity.service.CrimeService;
 import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.*;
+import com.example.smartcity.service.Mapper.Mappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,21 +29,28 @@ public class CrimeServiceImpl implements CrimeService {
     private final PoliceStationRepository policeStationRepository;
     private final OfficerRepository officerRepository;
     private final CitizenExternalApiServiceImpl citizenExternalApiService;
+    private final Mappers mappers;
 
 
     @Override
-    public ResponseEntity<?> getAllCrimes(Integer page) {
+    public List<CrimeResponseDTO> getAllCrimes(Integer page) {
         Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
         Page<Crime> allCrimes = crimeRepository.findAll(pageableAndSortedByTime);
-        return ResponseEntity.ok().body(new ApiResponse("Success", true, allCrimes));
+
+        List<CrimeResponseDTO> collect = allCrimes.getContent()
+                .stream()
+                .map(mappers::forCrimeResponseMapper)
+                .collect(Collectors.toList());
+
+        return collect;
     }
 
     @Override
-    public ResponseEntity<?> getCrimeById(UUID id) {
+    public CrimeResponseDTO getCrimeById(UUID id) {
         Crime byId = crimeRepository.findById(id)
                 .orElseThrow(() -> new RestException("Crime not found", HttpStatus.NOT_FOUND));
-        CrimeResponseDTO crimeResponseDTO = citizenExternalApiService.forResponseCrime(byId);
-        return ResponseEntity.ok().body(new ApiResponse("Success", true, crimeResponseDTO));
+
+        return mappers.forCrimeResponseMapper(byId);
     }
 
     @Override

@@ -8,11 +8,13 @@ import com.example.smartcity.payload.responseDTO.OfficerResponseDTO;
 import com.example.smartcity.repository.OfficerRepository;
 import com.example.smartcity.repository.PoliceStationRepository;
 import com.example.smartcity.repository.UserRepository;
+import com.example.smartcity.service.Mapper.Mappers;
 import com.example.smartcity.service.OfficerService;
 import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.OfficerDTO;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +23,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,29 +37,33 @@ public class OfficerServiceImpl implements OfficerService {
     private final PoliceStationRepository policeStationRepository;
     private final UserServiceImpl userService;
     private final UserRepository userRepository;
-
+    private final Mappers mappers;
     @Override
-    public ResponseEntity<?> getAllOfficers(Integer page) {
+    public List<OfficerResponseDTO> getAllOfficers(Integer page) {
         Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
         Page<Officer> officerList = officerRepository.findAll(pageableAndSortedByTime);
-        return ResponseEntity.ok().body(new ApiResponse("Officer list", true, officerList));
+
+        List<OfficerResponseDTO> collect = officerList.getContent()
+                .stream()
+                .map(mappers::forOfficerResponseMapper)
+                .collect(Collectors.toList());
+
+        return collect;
     }
 
     @Override
-    public ResponseEntity<?> getOfficerById(UUID id) {
+    public OfficerResponseDTO getOfficerById(UUID id) {
         Officer officer = officerRepository.findById(id)
                 .orElseThrow(() -> new RestException("Officer not found", HttpStatus.NOT_FOUND));
-        OfficerResponseDTO officerResponseDTO = citizenExternalApiService.forResponseOfficer(officer);
-        return ResponseEntity.ok().body(new ApiResponse("success", true, officerResponseDTO));
+        return mappers.forOfficerResponseMapper(officer);
     }
 
     @Override
-    public ResponseEntity<?> getOfficerByCardNumber(long cardNumber) {
+    public OfficerResponseDTO getOfficerByCardNumber(long cardNumber) {
         Officer officer = officerRepository.findByCardNumber(cardNumber)
                 .orElseThrow(() -> new RestException("Officer not found", HttpStatus.NOT_FOUND));
 
-        OfficerResponseDTO officerResponseDTO = citizenExternalApiService.forResponseOfficer(officer);
-        return ResponseEntity.ok().body(new ApiResponse("Success", true, officerResponseDTO));
+        return mappers.forOfficerResponseMapper(officer);
     }
 
     @Override

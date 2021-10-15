@@ -1,14 +1,17 @@
 package com.example.smartcity.controller;
 
+import com.example.smartcity.payload.responseDTO.PrisonerResponseDTO;
 import com.example.smartcity.service.impl.PrisonerServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.PrisonerDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -21,12 +24,14 @@ public class PrisonerController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<?> getAll(@RequestParam Integer page){
-        return prisonerService.getAllArrestedPeople(page);
+        List<PrisonerResponseDTO> allArrestedPeople = prisonerService.getAllArrestedPeople(page);
+        return new ResponseEntity<List<PrisonerResponseDTO>>(allArrestedPeople, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable UUID id){
-        return prisonerService.getPrisonerById(id);
+        PrisonerResponseDTO prisonerById = prisonerService.getPrisonerById(id);
+        return new ResponseEntity<PrisonerResponseDTO>(prisonerById,HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")

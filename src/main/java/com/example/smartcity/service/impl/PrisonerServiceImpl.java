@@ -3,7 +3,9 @@ package com.example.smartcity.service.impl;
 import com.example.smartcity.entity.Crime;
 import com.example.smartcity.entity.Prisoner;
 import com.example.smartcity.payload.responseDTO.PrisonerResponseDTO;
+import com.example.smartcity.payload.responseDTO.VictimResponseDTO;
 import com.example.smartcity.repository.PrisonerRepository;
+import com.example.smartcity.service.Mapper.Mappers;
 import com.example.smartcity.service.PrisonerService;
 import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.ApiResponse;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,20 +30,26 @@ public class PrisonerServiceImpl implements PrisonerService {
 
     private final PrisonerRepository prisonerRepository;
     private final CitizenExternalApiServiceImpl citizenExternalApiService;
+    private final Mappers mappers;
 
     @Override
-    public ResponseEntity<?> getAllArrestedPeople(Integer page) {
+    public List<PrisonerResponseDTO> getAllArrestedPeople(Integer page) {
         Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
         Page<Prisoner> prisoners = prisonerRepository.findAll(pageableAndSortedByTime);
-        return ResponseEntity.ok().body(new ApiResponse("Success", true, prisoners));
+        List<PrisonerResponseDTO> collect = prisoners.getContent()
+                .stream()
+                .map(mappers::forPrisonerResponseMapper)
+                .collect(Collectors.toList());
+
+        return collect;
     }
 
     @Override
-    public ResponseEntity<?> getPrisonerById(UUID id) {
+    public PrisonerResponseDTO getPrisonerById(UUID id) {
         Prisoner prisoner = prisonerRepository.findById(id)
                 .orElseThrow(() -> new RestException("Prisoner not found", HttpStatus.NOT_FOUND));
-        PrisonerResponseDTO prisonerResponseDTO = citizenExternalApiService.forResponsePrisoner(prisoner);
-        return ResponseEntity.ok().body(new ApiResponse("Success", true, prisonerResponseDTO));
+
+        return mappers.forPrisonerResponseMapper(prisoner);
     }
 
     @Override

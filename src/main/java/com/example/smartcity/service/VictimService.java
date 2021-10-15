@@ -2,8 +2,10 @@ package com.example.smartcity.service;
 
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.VictimDTO;
+import com.example.smartcity.payload.responseDTO.VictimResponseDTO;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -11,9 +13,9 @@ import java.util.UUID;
  */
 public interface VictimService {
 
-    ResponseEntity<?> getAllVictims(Integer page);
+    List<VictimResponseDTO> getAllVictims(Integer page);
 
-    ResponseEntity<?> getVictimById(UUID id);
+    VictimResponseDTO getVictimById(UUID id);
 
     ResponseEntity<?> addVictim(VictimDTO victimDTO);
 

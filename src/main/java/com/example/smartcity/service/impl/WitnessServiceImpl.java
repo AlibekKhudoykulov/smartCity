@@ -6,11 +6,13 @@ import com.example.smartcity.payload.CitizenDTO;
 import com.example.smartcity.payload.responseDTO.WitnessResponseDTO;
 import com.example.smartcity.repository.CrimeRepository;
 import com.example.smartcity.repository.WitnessRepository;
+import com.example.smartcity.service.Mapper.Mappers;
 import com.example.smartcity.service.WitnessService;
 import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.WitnessDTO;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,21 +31,27 @@ public class WitnessServiceImpl implements WitnessService {
 
     private final WitnessRepository witnessRepository;
     private final CitizenExternalApiServiceImpl citizenExternalApiService;
-    private final CrimeRepository crimeRepository;
+    private final Mappers mappers;
 
     @Override
-    public ResponseEntity<?> getAllWitnesses(Integer page) {
+    public List<WitnessResponseDTO> getAllWitnesses(Integer page) {
         Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
         Page<Witness> witnesses = witnessRepository.findAll(pageableAndSortedByTime);
-        return ResponseEntity.ok().body(new ApiResponse("Success",true,witnesses));
+
+        List<WitnessResponseDTO> collect = witnesses.getContent()
+                .stream()
+                .map(mappers::forWitnessResponseMapper)
+                .collect(Collectors.toList());
+
+        return collect;
     }
 
     @Override
-    public ResponseEntity<?> getWitnessById(UUID id) {
+    public WitnessResponseDTO getWitnessById(UUID id) {
         Witness witness = witnessRepository.findById(id)
                 .orElseThrow(() -> new RestException("Witness not found", HttpStatus.NOT_FOUND));
-        WitnessResponseDTO witnessResponseDTO = citizenExternalApiService.forResponseWitness(witness);
-        return ResponseEntity.ok().body(new ApiResponse("Success",true,witnessResponseDTO));
+        WitnessResponseDTO witnessResponseDTO = mappers.forWitnessResponseMapper(witness);
+        return witnessResponseDTO;
     }
 
     @Override
@@ -65,8 +74,7 @@ public class WitnessServiceImpl implements WitnessService {
         );
 
         witnessRepository.save(witness);
-
-        return ResponseEntity.ok().body(new ApiResponse("Successfully Added",true));
+        return ResponseEntity.ok(new ApiResponse("Successfully Added",true));
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.example.smartcity.service.impl;
 
 import com.example.smartcity.entity.PoliceStation;
+import com.example.smartcity.payload.responseDTO.PoliceStationResponseDTO;
 import com.example.smartcity.repository.PoliceStationRepository;
+import com.example.smartcity.service.Mapper.Mappers;
 import com.example.smartcity.service.PoliceStationService;
 import com.example.smartcity.exception.RestException;
 import com.example.smartcity.payload.ApiResponse;
@@ -15,27 +17,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class PoliceStationServiceImpl implements PoliceStationService {
 
     private final PoliceStationRepository policeStationRepository;
+    private final Mappers mappers;
 
     @Override
-    public ResponseEntity<?> getAllStations(Integer page) {
+    public List<PoliceStationResponseDTO> getAllStations(Integer page) {
         Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
         Page<PoliceStation> policeStationList = policeStationRepository.findAll(pageableAndSortedByTime);
-        return ResponseEntity.ok().body(new ApiResponse("Success",true,policeStationList));
+
+        List<PoliceStationResponseDTO> collect = policeStationList.getContent()
+                .stream()
+                .map(mappers::forPoliceStationResponseMapper)
+                .collect(Collectors.toList());
+
+        return collect;
     }
 
     @Override
-    public ResponseEntity<?> getStationById(UUID id) {
+    public PoliceStationResponseDTO getStationById(UUID id) {
         PoliceStation byId = policeStationRepository.findById(id)
                 .orElseThrow(()->new RestException("Police Station Not found", HttpStatus.NOT_FOUND));
 
-        return ResponseEntity.ok().body(new ApiResponse("Success",true,byId));
+           return mappers.forPoliceStationResponseMapper(byId);
     }
 
     @Override

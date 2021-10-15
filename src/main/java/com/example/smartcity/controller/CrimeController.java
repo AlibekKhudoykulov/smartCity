@@ -1,14 +1,17 @@
 package com.example.smartcity.controller;
 
+import com.example.smartcity.payload.responseDTO.CrimeResponseDTO;
 import com.example.smartcity.service.impl.CrimeServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.CrimeDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -21,12 +24,14 @@ public class CrimeController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<?> getAll(@RequestParam Integer page){
-        return crimeService.getAllCrimes(page);
+        List<CrimeResponseDTO> allCrimes = crimeService.getAllCrimes(page);
+        return new ResponseEntity<List<CrimeResponseDTO>>(allCrimes, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCrimeById(@PathVariable UUID id){
-        return crimeService.getCrimeById(id);
+        CrimeResponseDTO crimeById = crimeService.getCrimeById(id);
+        return new ResponseEntity<CrimeResponseDTO>(crimeById,HttpStatus.OK);
     }
 
     @PostMapping

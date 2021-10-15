@@ -15,6 +15,7 @@ import com.example.smartcity.repository.MorgueRequestRepository;
 import com.example.smartcity.repository.OfficerRepository;
 import com.example.smartcity.repository.UserRepository;
 import com.example.smartcity.repository.VictimRepository;
+import com.example.smartcity.service.Mapper.Mappers;
 import com.example.smartcity.service.ReceiveRequestAPIService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,7 @@ public class ReceiveRequestAPIServiceImpl implements ReceiveRequestAPIService {
     private final MorgueRequestRepository morgueRequestRepository;
     private final VictimServiceImpl victimService;
     private final CitizenExternalApiServiceImpl citizenExternalApiService;
+    private final Mappers mappers;
 
 
     @Override
@@ -62,7 +64,7 @@ public class ReceiveRequestAPIServiceImpl implements ReceiveRequestAPIService {
             for (Officer officer : officerRepository.findAllByRank(OfficerRank.EXPERT)) {
                 Optional<MorgueRequest> byOfficerCardNumber = morgueRequestRepository.findByOfficer(officer);
                 if (!byOfficerCardNumber.isPresent()) {
-                    OfficerResponseDTO officerResponseDTO = citizenExternalApiService.sendOfficer(officer);
+                    OfficerResponseDTO officerResponseDTO = mappers.forOfficerResponseMapper(officer);
                     morgueRequest.setOfficer(officer);
                     morgueRequest.setOfficerCardNumber(officer.getCardNumber());
                     morgueRequestRepository.save(morgueRequest);
@@ -70,7 +72,7 @@ public class ReceiveRequestAPIServiceImpl implements ReceiveRequestAPIService {
                 } else {
                     boolean endExamination = byOfficerCardNumber.get().isEndExamination();
                     if (endExamination) {
-                        OfficerResponseDTO officerResponseDTO = citizenExternalApiService.sendOfficer(officer);
+                        OfficerResponseDTO officerResponseDTO = mappers.forOfficerResponseMapper(officer);
                         morgueRequest.setOfficer(officer);
                         morgueRequest.setOfficerCardNumber(officer.getCardNumber());
                         morgueRequestRepository.save(morgueRequest);

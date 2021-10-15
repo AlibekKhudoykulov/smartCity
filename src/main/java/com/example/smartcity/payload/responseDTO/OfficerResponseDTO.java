@@ -4,6 +4,7 @@ import com.example.smartcity.entity.enums.OfficerRank;
 import com.example.smartcity.payload.PoliceStationDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @SuperBuilder
 public class OfficerResponseDTO {
 
@@ -24,7 +26,7 @@ public class OfficerResponseDTO {
 
     private OfficerRank rank;
 
-    private PoliceStationDTO policeStation;
+    private PoliceStationResponseDTO policeStation;
 
     private Date birthDate;
 
@@ -32,12 +34,4 @@ public class OfficerResponseDTO {
 
     private UUID photoId;
 
-    public OfficerResponseDTO(UUID uuid, long cardNumber, String firstName, String lastName, OfficerRank rank, PoliceStationDTO policeStation) {
-        this.uuid = uuid;
-        this.cardNumber = cardNumber;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.rank = rank;
-        this.policeStation = policeStation;
-    }
 }
