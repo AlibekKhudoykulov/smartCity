@@ -67,7 +67,7 @@ public class OfficerServiceImpl implements OfficerService {
     }
 
     @Override
-    public ResponseEntity<?> addOfficer(OfficerDTO officerDTO) {
+    public ApiResponse addOfficer(OfficerDTO officerDTO) {
         Optional<Officer> byCardNumber = officerRepository.findByCardNumber(officerDTO.getCardNumber());
         if (byCardNumber.isPresent()) throw new RestException("This card number already added",HttpStatus.CONFLICT);
         CitizenDTO citizenByCardNumber = citizenExternalApiService.getCitizenByCardNumber(officerDTO.getCardNumber());
@@ -103,11 +103,11 @@ public class OfficerServiceImpl implements OfficerService {
         }
 
         citizenExternalApiService.sendCheckingCertificate(save);
-        return ResponseEntity.ok().body(new ApiResponse("Officer saved successfully and sent for checking certificate",true));
+        return new ApiResponse("Officer saved successfully and sent for checking certificate",true);
     }
 
     @Override
-    public ResponseEntity<?> editOfficer(UUID id, OfficerDTO officerDTO) {
+    public ApiResponse editOfficer(UUID id, OfficerDTO officerDTO) {
         Officer officer = officerRepository.findById(id)
                 .orElseThrow(()-> new RestException("Officer not found",HttpStatus.NOT_FOUND));
 
@@ -122,14 +122,14 @@ public class OfficerServiceImpl implements OfficerService {
 
         officerRepository.save(officer);
 
-        return ResponseEntity.ok().body(new ApiResponse("Officer updated successfully",true));
+        return new ApiResponse("Officer updated successfully",true);
     }
 
     @Override
-    public ResponseEntity<?> deleteOfficer(UUID id) {
+    public ApiResponse deleteOfficer(UUID id) {
         try {
             officerRepository.deleteById(id);
-            return ResponseEntity.ok().body(new ApiResponse("Successfully deleted", true));
+            return new ApiResponse("Successfully deleted", true);
 
         } catch (Exception e) {
             throw new RestException("Officer Not found", HttpStatus.NOT_FOUND);

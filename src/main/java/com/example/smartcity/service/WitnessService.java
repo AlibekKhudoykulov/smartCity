@@ -17,9 +17,9 @@ public interface WitnessService {
 
     List<WitnessResponseDTO> getAllWitnesses(Integer page);
 
-    ResponseEntity<?> addWitness(WitnessDTO witnessDTO);
+    ApiResponse addWitness(WitnessDTO witnessDTO);
 
-    ResponseEntity<?> editWitness(UUID id,WitnessDTO witnessDTO);
+    ApiResponse editWitness(UUID id,WitnessDTO witnessDTO);
 
-    ResponseEntity<?> deleteWitness(UUID id);
+    ApiResponse deleteWitness(UUID id);
 }

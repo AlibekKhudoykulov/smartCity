@@ -37,18 +37,22 @@ public class WitnessController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
     public ResponseEntity<?> add(@RequestBody WitnessDTO witnessDTO){
-        return witnessService.addWitness(witnessDTO);
+        ApiResponse apiResponse = witnessService.addWitness(witnessDTO);
+        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable UUID id,@RequestBody WitnessDTO witnessDTO){
-        return witnessService.editWitness(id,witnessDTO);
+        ApiResponse apiResponse = witnessService.editWitness(id, witnessDTO);
+        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
+
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id){
-        return witnessService.deleteWitness(id);
+        ApiResponse apiResponse = witnessService.deleteWitness(id);
+        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
     }
 }

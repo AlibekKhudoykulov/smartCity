@@ -18,9 +18,9 @@ public interface PrisonerService {
 
     List<PrisonerResponseDTO> getAllArrestedPeople(Integer page);
 
-    ResponseEntity<?> addPrisoner(PrisonerDTO prisonerDTO);
+    ApiResponse addPrisoner(PrisonerDTO prisonerDTO);
 
-    ResponseEntity<?> editPrisoner(UUID id,PrisonerDTO prisonerDTO);
+    ApiResponse editPrisoner(UUID id,PrisonerDTO prisonerDTO);
 
-    ResponseEntity<?> deletePrisoner(UUID id);
+    ApiResponse deletePrisoner(UUID id);
 }

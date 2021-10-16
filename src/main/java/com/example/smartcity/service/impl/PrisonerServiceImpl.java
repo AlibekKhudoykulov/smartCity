@@ -54,7 +54,7 @@ public class PrisonerServiceImpl implements PrisonerService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> addPrisoner(PrisonerDTO prisonerDTO) {
+    public ApiResponse addPrisoner(PrisonerDTO prisonerDTO) {
         CitizenDTO citizenByCardNumber = citizenExternalApiService.getCitizenByCardNumber(prisonerDTO.getCardNumber());
 
         List<Crime> crimeList= citizenExternalApiService.getCrimesWithId(prisonerDTO.getCrimes());
@@ -74,13 +74,13 @@ public class PrisonerServiceImpl implements PrisonerService {
 
         prisonerRepository.save(prisoner);
         citizenExternalApiService.sendPrisonerToCityManagement(prisonerDTO.getCardNumber());
-        return ResponseEntity.ok().body(new ApiResponse("success",true));
+        return new ApiResponse("success",true);
 
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> editPrisoner(UUID id, PrisonerDTO prisonerDTO) {
+    public ApiResponse editPrisoner(UUID id, PrisonerDTO prisonerDTO) {
 
         Prisoner prisoner = prisonerRepository.findById(id)
                 .orElseThrow(()-> new RestException("Not found",HttpStatus.NOT_FOUND));
@@ -112,15 +112,15 @@ public class PrisonerServiceImpl implements PrisonerService {
         }
 
         prisonerRepository.save(prisoner);
-        return ResponseEntity.ok().body(new ApiResponse("Prisoner Updated Successfully",true));
+        return new ApiResponse("Prisoner Updated Successfully",true);
 
     }
 
     @Override
-    public ResponseEntity<?> deletePrisoner(UUID id) {
+    public ApiResponse deletePrisoner(UUID id) {
         try {
             prisonerRepository.deleteById(id);
-            return ResponseEntity.ok().body(new ApiResponse("Successfully deleted", true));
+            return new ApiResponse("Successfully deleted", true);
         } catch (Exception e) {
             throw new RestException("Prisoner Not found", HttpStatus.NOT_FOUND);
         }

@@ -19,10 +19,10 @@ public interface OfficerService {
 
     OfficerResponseDTO getOfficerByCardNumber(long cardNumber);
 
-    ResponseEntity<?> addOfficer(OfficerDTO officerDTO);
+    ApiResponse addOfficer(OfficerDTO officerDTO);
 
-    ResponseEntity<?> editOfficer(UUID id,OfficerDTO officerDTO);
+    ApiResponse editOfficer(UUID id,OfficerDTO officerDTO);
 
-    ResponseEntity<?> deleteOfficer(UUID id);
+    ApiResponse deleteOfficer(UUID id);
 
 }

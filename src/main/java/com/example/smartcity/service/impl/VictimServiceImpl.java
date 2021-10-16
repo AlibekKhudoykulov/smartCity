@@ -56,7 +56,7 @@ public class VictimServiceImpl implements VictimService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> addVictim(VictimDTO victimDTO) {
+    public ApiResponse addVictim(VictimDTO victimDTO) {
         boolean existsByCardNumber = victimRepository.existsByCardNumber(victimDTO.getCardNumber());
         if (existsByCardNumber) throw new RestException("This card number already added",HttpStatus.CONFLICT);
 
@@ -78,12 +78,12 @@ public class VictimServiceImpl implements VictimService {
         if (victimDTO.isDead()) citizenExternalApiService.sendDeathPersonToCityManagement(victimDTO.getCardNumber());
 
         victimRepository.save(victim);
-        return ResponseEntity.ok().body(new  ApiResponse("Victim Saved Successfully",true));
+        return new  ApiResponse("Victim Saved Successfully",true);
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> editVictim(UUID id,VictimDTO victimDTO) {
+    public ApiResponse editVictim(UUID id,VictimDTO victimDTO) {
         Victim victim = victimRepository.findById(id).
                 orElseThrow(() -> new RestException("Not found", HttpStatus.NOT_FOUND));
         boolean byCardNumberAndIdNot = victimRepository.existsByCardNumberAndIdNot(victimDTO.getCardNumber(), id);
@@ -105,14 +105,14 @@ public class VictimServiceImpl implements VictimService {
         victim.setDead(victimDTO.isDead());
 
         victimRepository.save(victim);
-        return ResponseEntity.ok().body(new ApiResponse("Victim Updated Successfully",true));
+        return new ApiResponse("Victim Updated Successfully",true);
     }
 
     @Override
-    public ResponseEntity<?> deleteVictim(UUID id) {
+    public ApiResponse deleteVictim(UUID id) {
         try {
             victimRepository.deleteById(id);
-            return ResponseEntity.ok().body(new ApiResponse("Successfully deleted", true));
+            return new ApiResponse("Successfully deleted", true);
         } catch (Exception e) {
             throw new RestException("Victim Not found", HttpStatus.NOT_FOUND);
         }

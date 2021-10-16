@@ -43,18 +43,22 @@ public class OfficerController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
     public ResponseEntity<?> add(@RequestBody OfficerDTO officerDTO){
-        return officerService.addOfficer(officerDTO);
+        ApiResponse apiResponse = officerService.addOfficer(officerDTO);
+        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
+
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable UUID id,@RequestBody OfficerDTO officerDTO){
-        return officerService.editOfficer(id,officerDTO);
+        ApiResponse apiResponse = officerService.editOfficer(id, officerDTO);
+        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id){
-        return officerService.deleteOfficer(id);
+        ApiResponse apiResponse = officerService.deleteOfficer(id);
+        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
     }
 }

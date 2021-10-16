@@ -36,17 +36,22 @@ public class CrimeController {
 
     @PostMapping
     public ResponseEntity<?> addCrime(@RequestBody CrimeDTO crimeDTO){
-        return crimeService.addCrime(crimeDTO);
+        ApiResponse apiResponse = crimeService.addCrime(crimeDTO);
+        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> editCrime(@PathVariable UUID id,@RequestBody CrimeDTO crimeDTO){
-        return crimeService.editCrime(id,crimeDTO);
+        ApiResponse apiResponse = crimeService.editCrime(id, crimeDTO);
+        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
+
     }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCrime(@PathVariable UUID id){
-        return crimeService.deleteCrime(id);
+        ApiResponse apiResponse = crimeService.deleteCrime(id);
+        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
     }
 }

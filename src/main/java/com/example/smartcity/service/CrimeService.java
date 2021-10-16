@@ -17,9 +17,9 @@ public interface CrimeService {
 
     CrimeResponseDTO getCrimeById(UUID id);
 
-    ResponseEntity<?> addCrime(CrimeDTO crimeDTO);
+    ApiResponse addCrime(CrimeDTO crimeDTO);
 
-    ResponseEntity<?> editCrime(UUID id,CrimeDTO crimeDTO);
+    ApiResponse editCrime(UUID id,CrimeDTO crimeDTO);
 
-    ResponseEntity<?> deleteCrime(UUID id);
+    ApiResponse deleteCrime(UUID id);
 }

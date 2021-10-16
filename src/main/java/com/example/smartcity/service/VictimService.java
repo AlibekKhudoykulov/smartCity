@@ -17,9 +17,9 @@ public interface VictimService {
 
     VictimResponseDTO getVictimById(UUID id);
 
-    ResponseEntity<?> addVictim(VictimDTO victimDTO);
+    ApiResponse addVictim(VictimDTO victimDTO);
 
-    ResponseEntity<?> editVictim(UUID id,VictimDTO victimDTO);
+    ApiResponse editVictim(UUID id,VictimDTO victimDTO);
 
-    ResponseEntity<?> deleteVictim(UUID id);
+    ApiResponse deleteVictim(UUID id);
 }

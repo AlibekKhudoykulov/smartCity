@@ -101,8 +101,8 @@ public class ReceiveRequestAPIServiceImpl implements ReceiveRequestAPIService {
         victimDTO.setRemark(victimDTO.getRemark());
         victimDTO.setDead(true);
 
-        ResponseEntity<?> responseEntity = victimService.addVictim(victimDTO);
-        return ResponseEntity.status(responseEntity.getStatusCode().equals(HttpStatus.OK) ? HttpStatus.OK : HttpStatus.CONFLICT).
-                body(responseEntity.getBody());
+        ApiResponse apiResponse = victimService.addVictim(victimDTO);
+        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT).
+                body(apiResponse);
     }
 }

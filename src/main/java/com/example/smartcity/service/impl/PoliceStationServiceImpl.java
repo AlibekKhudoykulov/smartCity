@@ -51,7 +51,7 @@ public class PoliceStationServiceImpl implements PoliceStationService {
     }
 
     @Override
-    public ResponseEntity<?> addStation(PoliceStationDTO policeStationDTO) {
+    public ApiResponse addStation(PoliceStationDTO policeStationDTO) {
         Optional<PoliceStation> byName = policeStationRepository.findByName(policeStationDTO.getName());
         if (byName.isPresent()) throw new RestException("Already exists this Police Station",HttpStatus.CONFLICT);
 
@@ -64,11 +64,11 @@ public class PoliceStationServiceImpl implements PoliceStationService {
 
         policeStationRepository.save(policeStation);
 
-        return ResponseEntity.ok().body(new ApiResponse("Police Station Saved Successfully",true));
+        return new ApiResponse("Police Station Saved Successfully",true);
     }
 
     @Override
-    public ResponseEntity<?> editStation(UUID id, PoliceStationDTO policeStationDTO) {
+    public ApiResponse editStation(UUID id, PoliceStationDTO policeStationDTO) {
         PoliceStation station = policeStationRepository.findById(id)
                 .orElseThrow(() -> new RestException("Police Station Not found",HttpStatus.NOT_FOUND));
         station.setName(policeStationDTO.getName());
@@ -78,14 +78,14 @@ public class PoliceStationServiceImpl implements PoliceStationService {
 
         policeStationRepository.save(station);
 
-        return ResponseEntity.ok().body(new ApiResponse("Edited Successfully",true));
+        return new ApiResponse("Edited Successfully",true);
     }
 
     @Override
-    public ResponseEntity<?> deleteStation(UUID id) {
+    public ApiResponse deleteStation(UUID id) {
         try {
             policeStationRepository.deleteById(id);
-            return ResponseEntity.ok().body(new ApiResponse("Successfully deleted", true));
+            return new ApiResponse("Successfully deleted", true);
         } catch (Exception e) {
             throw new RestException("Police Station Not found", HttpStatus.NOT_FOUND);
         }

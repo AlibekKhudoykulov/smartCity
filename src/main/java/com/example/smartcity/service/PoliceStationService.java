@@ -18,10 +18,10 @@ public interface PoliceStationService {
 
     PoliceStationResponseDTO getStationById(UUID id);
 
-    ResponseEntity<?> addStation(PoliceStationDTO policeStationDTO);
+    ApiResponse addStation(PoliceStationDTO policeStationDTO);
 
-    ResponseEntity<?> editStation(UUID id, PoliceStationDTO policeStationDTO);
+    ApiResponse editStation(UUID id, PoliceStationDTO policeStationDTO);
 
-    ResponseEntity<?> deleteStation(UUID id);
+    ApiResponse deleteStation(UUID id);
 
 }

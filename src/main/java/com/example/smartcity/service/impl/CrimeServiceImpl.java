@@ -54,7 +54,7 @@ public class CrimeServiceImpl implements CrimeService {
     }
 
     @Override
-    public ResponseEntity<?> addCrime(CrimeDTO crimeDTO) {
+    public ApiResponse addCrime(CrimeDTO crimeDTO) {
 
         List<Officer> list=new ArrayList<>();
         if (crimeDTO.getOfficers()!=null) {
@@ -80,11 +80,11 @@ public class CrimeServiceImpl implements CrimeService {
 
         );
         crimeRepository.save(crime);
-        return ResponseEntity.ok().body(new ApiResponse("Saved successfully",true));
+        return new ApiResponse("Saved successfully",true);
     }
 
     @Override
-    public ResponseEntity<?> editCrime(UUID id, CrimeDTO crimeDTO) {
+    public ApiResponse editCrime(UUID id, CrimeDTO crimeDTO) {
         Crime crime = crimeRepository.findById(id)
                 .orElseThrow(() -> new RestException("Not Found",HttpStatus.NOT_FOUND));
 
@@ -100,14 +100,14 @@ public class CrimeServiceImpl implements CrimeService {
         crime.setCrimeType(crimeDTO.getCrimeType());
         crime.setCrimeStatus(crimeDTO.getCrimeStatus());
 
-        return ResponseEntity.ok().body(new ApiResponse("Edited successfully",true));
+        return new ApiResponse("Edited successfully",true);
     }
 
     @Override
-    public ResponseEntity<?> deleteCrime(UUID id) {
+    public ApiResponse deleteCrime(UUID id) {
         try {
             crimeRepository.deleteById(id);
-            return ResponseEntity.ok().body(new ApiResponse("Successfully deleted", true));
+            return new ApiResponse("Successfully deleted", true);
         } catch (Exception e) {
             throw new RestException("Crime Not found", HttpStatus.NOT_FOUND);
         }

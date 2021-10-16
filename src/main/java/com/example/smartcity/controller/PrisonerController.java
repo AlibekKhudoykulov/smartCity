@@ -37,18 +37,24 @@ public class PrisonerController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
     public ResponseEntity<?> add(@RequestBody PrisonerDTO prisonerDTO){
-        return prisonerService.addPrisoner(prisonerDTO);
+        ApiResponse apiResponse = prisonerService.addPrisoner(prisonerDTO);
+        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
+
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable UUID id,@RequestBody PrisonerDTO prisonerDTO){
-        return prisonerService.editPrisoner(id,prisonerDTO);
+        ApiResponse apiResponse = prisonerService.editPrisoner(id, prisonerDTO);
+        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
+
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id){
-        return prisonerService.deletePrisoner(id);
+        ApiResponse apiResponse = prisonerService.deletePrisoner(id);
+        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
+
     }
 }
