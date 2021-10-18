@@ -23,20 +23,20 @@ public class PrisonerController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
-    public ResponseEntity<?> getAll(@RequestParam Integer page){
+    public ResponseEntity<List<PrisonerResponseDTO>> getAll(@RequestParam Integer page){
         List<PrisonerResponseDTO> allArrestedPeople = prisonerService.getAllArrestedPeople(page);
         return new ResponseEntity<List<PrisonerResponseDTO>>(allArrestedPeople, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable UUID id){
+    public ResponseEntity<PrisonerResponseDTO> getById(@PathVariable UUID id){
         PrisonerResponseDTO prisonerById = prisonerService.getPrisonerById(id);
         return new ResponseEntity<PrisonerResponseDTO>(prisonerById,HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody PrisonerDTO prisonerDTO){
+    public ResponseEntity<ApiResponse> add(@RequestBody PrisonerDTO prisonerDTO){
         ApiResponse apiResponse = prisonerService.addPrisoner(prisonerDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 
@@ -44,7 +44,7 @@ public class PrisonerController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> edit(@PathVariable UUID id,@RequestBody PrisonerDTO prisonerDTO){
+    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody PrisonerDTO prisonerDTO){
         ApiResponse apiResponse = prisonerService.editPrisoner(id, prisonerDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 
@@ -52,7 +52,7 @@ public class PrisonerController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable UUID id){
+    public ResponseEntity<ApiResponse> delete(@PathVariable UUID id){
         ApiResponse apiResponse = prisonerService.deletePrisoner(id);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
 

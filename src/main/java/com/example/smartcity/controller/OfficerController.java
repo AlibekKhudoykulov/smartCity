@@ -23,26 +23,26 @@ public class OfficerController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
-    public ResponseEntity<?> getAll(@RequestParam Integer page){
+    public ResponseEntity<List<OfficerResponseDTO>> getAll(@RequestParam Integer page){
         List<OfficerResponseDTO> allOfficers = officerService.getAllOfficers(page);
         return new ResponseEntity<List<OfficerResponseDTO>>(allOfficers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOfficerById(@PathVariable UUID id){
+    public ResponseEntity<OfficerResponseDTO> getOfficerById(@PathVariable UUID id){
         OfficerResponseDTO officerById = officerService.getOfficerById(id);
         return new ResponseEntity<OfficerResponseDTO>(officerById,HttpStatus.OK);
     }
 
     @GetMapping("/{cardNumber}")
-    public ResponseEntity<?> getOfficerById(@PathVariable Long cardNumber){
+    public ResponseEntity<OfficerResponseDTO> getOfficerById(@PathVariable Long cardNumber){
         OfficerResponseDTO officerByCardNumber = officerService.getOfficerByCardNumber(cardNumber);
         return new ResponseEntity<OfficerResponseDTO>(officerByCardNumber,HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody OfficerDTO officerDTO){
+    public ResponseEntity<ApiResponse> add(@RequestBody OfficerDTO officerDTO){
         ApiResponse apiResponse = officerService.addOfficer(officerDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 
@@ -50,14 +50,14 @@ public class OfficerController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> edit(@PathVariable UUID id,@RequestBody OfficerDTO officerDTO){
+    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody OfficerDTO officerDTO){
         ApiResponse apiResponse = officerService.editOfficer(id, officerDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable UUID id){
+    public ResponseEntity<ApiResponse> delete(@PathVariable UUID id){
         ApiResponse apiResponse = officerService.deleteOfficer(id);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
     }

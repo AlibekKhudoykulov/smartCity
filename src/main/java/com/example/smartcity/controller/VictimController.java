@@ -23,27 +23,27 @@ public class VictimController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
-    public ResponseEntity<?> getAll(@RequestParam Integer page){
+    public ResponseEntity<List<VictimResponseDTO>> getAll(@RequestParam Integer page){
         List<VictimResponseDTO> allVictims = victimService.getAllVictims(page);
         return new ResponseEntity<List<VictimResponseDTO>>(allVictims,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable UUID id){
+    public ResponseEntity<VictimResponseDTO> getById(@PathVariable UUID id){
         VictimResponseDTO victimById = victimService.getVictimById(id);
         return new ResponseEntity<VictimResponseDTO>(victimById, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody VictimDTO victimDTO){
+    public ResponseEntity<ApiResponse> add(@RequestBody VictimDTO victimDTO){
         ApiResponse apiResponse = victimService.addVictim(victimDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> edit(@PathVariable UUID id,@RequestBody VictimDTO victimDTO){
+    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody VictimDTO victimDTO){
         ApiResponse apiResponse = victimService.editVictim(id, victimDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 
@@ -51,7 +51,7 @@ public class VictimController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable UUID id){
+    public ResponseEntity<ApiResponse> delete(@PathVariable UUID id){
         ApiResponse apiResponse = victimService.deleteVictim(id);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
     }

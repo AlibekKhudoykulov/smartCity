@@ -23,27 +23,27 @@ public class WitnessController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
-    public ResponseEntity<?> getAll(@RequestParam Integer page){
+    public ResponseEntity<List<WitnessResponseDTO>> getAll(@RequestParam Integer page){
         List<WitnessResponseDTO> allWitnesses = witnessService.getAllWitnesses(page);
         return new ResponseEntity<List<WitnessResponseDTO>>(allWitnesses,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable UUID id){
+    public ResponseEntity<WitnessResponseDTO> getById(@PathVariable UUID id){
         WitnessResponseDTO witnessById = witnessService.getWitnessById(id);
         return new ResponseEntity<WitnessResponseDTO>(witnessById, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody WitnessDTO witnessDTO){
+    public ResponseEntity<ApiResponse> add(@RequestBody WitnessDTO witnessDTO){
         ApiResponse apiResponse = witnessService.addWitness(witnessDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> edit(@PathVariable UUID id,@RequestBody WitnessDTO witnessDTO){
+    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody WitnessDTO witnessDTO){
         ApiResponse apiResponse = witnessService.editWitness(id, witnessDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 
@@ -51,7 +51,7 @@ public class WitnessController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable UUID id){
+    public ResponseEntity<ApiResponse> delete(@PathVariable UUID id){
         ApiResponse apiResponse = witnessService.deleteWitness(id);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
     }

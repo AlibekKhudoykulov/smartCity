@@ -23,26 +23,26 @@ public class CrimeController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
-    public ResponseEntity<?> getAll(@RequestParam Integer page){
+    public ResponseEntity<List<CrimeResponseDTO>> getAll(@RequestParam Integer page){
         List<CrimeResponseDTO> allCrimes = crimeService.getAllCrimes(page);
         return new ResponseEntity<List<CrimeResponseDTO>>(allCrimes, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCrimeById(@PathVariable UUID id){
+    public ResponseEntity<CrimeResponseDTO> getCrimeById(@PathVariable UUID id){
         CrimeResponseDTO crimeById = crimeService.getCrimeById(id);
         return new ResponseEntity<CrimeResponseDTO>(crimeById,HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> addCrime(@RequestBody CrimeDTO crimeDTO){
+    public ResponseEntity<ApiResponse> addCrime(@RequestBody CrimeDTO crimeDTO){
         ApiResponse apiResponse = crimeService.addCrime(crimeDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> editCrime(@PathVariable UUID id,@RequestBody CrimeDTO crimeDTO){
+    public ResponseEntity<ApiResponse> editCrime(@PathVariable UUID id,@RequestBody CrimeDTO crimeDTO){
         ApiResponse apiResponse = crimeService.editCrime(id, crimeDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 
@@ -50,7 +50,7 @@ public class CrimeController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCrime(@PathVariable UUID id){
+    public ResponseEntity<ApiResponse> deleteCrime(@PathVariable UUID id){
         ApiResponse apiResponse = crimeService.deleteCrime(id);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
     }

@@ -23,20 +23,20 @@ public class PoliceStationController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
-    public ResponseEntity<?> getAll(@RequestParam Integer page){
+    public ResponseEntity<List<PoliceStationResponseDTO>> getAll(@RequestParam Integer page){
         List<PoliceStationResponseDTO> allStations = policeStationService.getAllStations(page);
         return new ResponseEntity<List<PoliceStationResponseDTO>>(allStations, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable UUID id){
+    public ResponseEntity<PoliceStationResponseDTO> getById(@PathVariable UUID id){
         PoliceStationResponseDTO stationById = policeStationService.getStationById(id);
         return new ResponseEntity<PoliceStationResponseDTO>(stationById,HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody PoliceStationDTO policeStationDTO){
+    public ResponseEntity<ApiResponse> add(@RequestBody PoliceStationDTO policeStationDTO){
         ApiResponse apiResponse = policeStationService.addStation(policeStationDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 
@@ -44,7 +44,7 @@ public class PoliceStationController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> edit(@PathVariable UUID id,@RequestBody PoliceStationDTO policeStationDTO){
+    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody PoliceStationDTO policeStationDTO){
         ApiResponse apiResponse = policeStationService.editStation(id, policeStationDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 
@@ -52,7 +52,7 @@ public class PoliceStationController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable UUID id){
+    public ResponseEntity<ApiResponse> delete(@PathVariable UUID id){
         ApiResponse apiResponse = policeStationService.deleteStation(id);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
 
