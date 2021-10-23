@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/request")
 @RequiredArgsConstructor
+@CrossOrigin
 public class ReceiveRequestAPIController {
 
     private final ReceiveRequestAPIServiceImpl receiveRequestAPIService;

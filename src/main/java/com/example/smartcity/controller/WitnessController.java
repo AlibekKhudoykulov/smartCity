@@ -1,5 +1,6 @@
 package com.example.smartcity.controller;
 
+import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.payload.responseDTO.WitnessResponseDTO;
 import com.example.smartcity.service.impl.WitnessServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
@@ -17,15 +18,16 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/witness")
 @RequiredArgsConstructor
+@CrossOrigin
 public class WitnessController {
 
     private final WitnessServiceImpl witnessService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
-    public ResponseEntity<List<WitnessResponseDTO>> getAll(@RequestParam Integer page){
-        List<WitnessResponseDTO> allWitnesses = witnessService.getAllWitnesses(page);
-        return new ResponseEntity<List<WitnessResponseDTO>>(allWitnesses,HttpStatus.OK);
+    public ResponseEntity<CustomPage<WitnessResponseDTO>> getAll(@RequestParam Integer page){
+        CustomPage<WitnessResponseDTO> allWitnesses = witnessService.getAllWitnesses(page);
+        return new ResponseEntity<CustomPage<WitnessResponseDTO>>(allWitnesses,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,5 @@
 package com.example.smartcity.service;
 
-import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.UserDTO;
 import org.springframework.http.ResponseEntity;
 

@@ -2,6 +2,7 @@ package com.example.smartcity.service.impl;
 
 import com.example.smartcity.entity.Crime;
 import com.example.smartcity.entity.Prisoner;
+import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.payload.responseDTO.PrisonerResponseDTO;
 import com.example.smartcity.payload.responseDTO.VictimResponseDTO;
 import com.example.smartcity.repository.PrisonerRepository;
@@ -33,15 +34,11 @@ public class PrisonerServiceImpl implements PrisonerService {
     private final Mappers mappers;
 
     @Override
-    public List<PrisonerResponseDTO> getAllArrestedPeople(Integer page) {
+    public CustomPage<PrisonerResponseDTO> getAllArrestedPeople(Integer page) {
         Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
         Page<Prisoner> prisoners = prisonerRepository.findAll(pageableAndSortedByTime);
-        List<PrisonerResponseDTO> collect = prisoners.getContent()
-                .stream()
-                .map(mappers::forPrisonerResponseMapper)
-                .collect(Collectors.toList());
-
-        return collect;
+        CustomPage<PrisonerResponseDTO> prisonerResponseDTOCustomPage = Mappers.prisonerCustomPage(prisoners);
+        return prisonerResponseDTOCustomPage;
     }
 
     @Override

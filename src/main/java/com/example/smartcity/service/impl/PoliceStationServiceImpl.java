@@ -1,6 +1,7 @@
 package com.example.smartcity.service.impl;
 
 import com.example.smartcity.entity.PoliceStation;
+import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.payload.responseDTO.PoliceStationResponseDTO;
 import com.example.smartcity.repository.PoliceStationRepository;
 import com.example.smartcity.service.Mapper.Mappers;
@@ -30,16 +31,11 @@ public class PoliceStationServiceImpl implements PoliceStationService {
     private final Mappers mappers;
 
     @Override
-    public List<PoliceStationResponseDTO> getAllStations(Integer page) {
+    public CustomPage<PoliceStationResponseDTO> getAllStations(Integer page) {
         Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
         Page<PoliceStation> policeStationList = policeStationRepository.findAll(pageableAndSortedByTime);
-
-        List<PoliceStationResponseDTO> collect = policeStationList.getContent()
-                .stream()
-                .map(mappers::forPoliceStationResponseMapper)
-                .collect(Collectors.toList());
-
-        return collect;
+        CustomPage<PoliceStationResponseDTO> policeStationResponseDTOCustomPage = Mappers.policeStationCustomPage(policeStationList);
+        return policeStationResponseDTOCustomPage;
     }
 
     @Override

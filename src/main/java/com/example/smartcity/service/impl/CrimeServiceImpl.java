@@ -3,6 +3,7 @@ package com.example.smartcity.service.impl;
 import com.example.smartcity.entity.*;
 import com.example.smartcity.entity.enums.CrimeReportStatus;
 import com.example.smartcity.payload.responseDTO.CrimeResponseDTO;
+import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.repository.*;
 import com.example.smartcity.service.CrimeService;
 import com.example.smartcity.exception.RestException;
@@ -33,16 +34,11 @@ public class CrimeServiceImpl implements CrimeService {
 
 
     @Override
-    public List<CrimeResponseDTO> getAllCrimes(Integer page) {
+    public CustomPage<CrimeResponseDTO> getAllCrimes(Integer page) {
         Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
         Page<Crime> allCrimes = crimeRepository.findAll(pageableAndSortedByTime);
-
-        List<CrimeResponseDTO> collect = allCrimes.getContent()
-                .stream()
-                .map(mappers::forCrimeResponseMapper)
-                .collect(Collectors.toList());
-
-        return collect;
+        CustomPage<CrimeResponseDTO> crimeResponseDTOCustomPage = Mappers.CrimeCustomPage(allCrimes);
+        return crimeResponseDTOCustomPage;
     }
 
     @Override

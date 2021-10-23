@@ -2,6 +2,7 @@ package com.example.smartcity.service;
 
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.PrisonerDTO;
+import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.payload.responseDTO.PrisonerResponseDTO;
 import org.springframework.http.ResponseEntity;
 
@@ -16,7 +17,7 @@ public interface PrisonerService {
 
     PrisonerResponseDTO getPrisonerById(UUID id);
 
-    List<PrisonerResponseDTO> getAllArrestedPeople(Integer page);
+    CustomPage<PrisonerResponseDTO> getAllArrestedPeople(Integer page);
 
     ApiResponse addPrisoner(PrisonerDTO prisonerDTO);
 

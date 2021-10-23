@@ -4,6 +4,7 @@ import com.example.smartcity.entity.Officer;
 import com.example.smartcity.entity.PoliceStation;
 import com.example.smartcity.payload.CitizenDTO;
 import com.example.smartcity.payload.UserDTO;
+import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.payload.responseDTO.OfficerResponseDTO;
 import com.example.smartcity.repository.OfficerRepository;
 import com.example.smartcity.repository.PoliceStationRepository;
@@ -39,16 +40,12 @@ public class OfficerServiceImpl implements OfficerService {
     private final UserRepository userRepository;
     private final Mappers mappers;
     @Override
-    public List<OfficerResponseDTO> getAllOfficers(Integer page) {
+    public CustomPage<OfficerResponseDTO> getAllOfficers(Integer page) {
         Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
         Page<Officer> officerList = officerRepository.findAll(pageableAndSortedByTime);
+        CustomPage<OfficerResponseDTO> officerResponseDTOCustomPage = Mappers.officerCustomPage(officerList);
 
-        List<OfficerResponseDTO> collect = officerList.getContent()
-                .stream()
-                .map(mappers::forOfficerResponseMapper)
-                .collect(Collectors.toList());
-
-        return collect;
+        return officerResponseDTOCustomPage;
     }
 
     @Override

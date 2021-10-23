@@ -54,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .httpBasic().disable()
                     .authorizeRequests()
                     .antMatchers(
+                            "/**",
                             "/swagger-ui/",
                             "/api/login",
                             "/v2/api-docs",

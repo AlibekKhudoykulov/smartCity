@@ -2,6 +2,7 @@ package com.example.smartcity.service;
 
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.PoliceStationDTO;
+import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.payload.responseDTO.PoliceStationResponseDTO;
 import org.springframework.http.ResponseEntity;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 public interface PoliceStationService {
 
-    List<PoliceStationResponseDTO> getAllStations(Integer page);
+    CustomPage<PoliceStationResponseDTO> getAllStations(Integer page);
 
     PoliceStationResponseDTO getStationById(UUID id);
 

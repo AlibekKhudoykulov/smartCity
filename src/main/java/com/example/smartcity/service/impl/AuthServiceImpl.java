@@ -1,6 +1,7 @@
 package com.example.smartcity.service.impl;
 
 import com.example.smartcity.entity.User;
+import com.example.smartcity.payload.UserInfo;
 import com.example.smartcity.repository.UserRepository;
 import com.example.smartcity.security.JwtProvider;
 import com.example.smartcity.service.AuthService;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -51,4 +53,18 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse("Password or login incorrect!", false));
         }
     }
+
+    @Override
+    public ResponseEntity<?> authToken(User user) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(user==null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse("Unauthorized", false));
+        }
+        UserInfo userInfo = UserInfo.builder()
+                .username(user.getUsername())
+                .roles(user.getRoles()).build();
+        return ResponseEntity.ok().body(new ApiResponse("Success!",true, userInfo));
+    }
+
 }

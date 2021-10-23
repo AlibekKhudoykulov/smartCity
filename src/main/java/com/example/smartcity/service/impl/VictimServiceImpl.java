@@ -3,6 +3,7 @@ package com.example.smartcity.service.impl;
 import com.example.smartcity.entity.Crime;
 import com.example.smartcity.entity.Victim;
 import com.example.smartcity.payload.CitizenDTO;
+import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.payload.responseDTO.VictimResponseDTO;
 import com.example.smartcity.payload.responseDTO.WitnessResponseDTO;
 import com.example.smartcity.repository.VictimRepository;
@@ -34,16 +35,12 @@ public class VictimServiceImpl implements VictimService {
     private final Mappers mappers;
 
     @Override
-    public List<VictimResponseDTO> getAllVictims(Integer page) {
+    public CustomPage<VictimResponseDTO> getAllVictims(Integer page) {
         Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());
         Page<Victim> all = victimRepository.findAll(pageableAndSortedByTime);
+        CustomPage<VictimResponseDTO> victimResponseDTOCustomPage = Mappers.victimCustomPage(all);
 
-        List<VictimResponseDTO> collect = all.getContent()
-                .stream()
-                .map(mappers::forVictimResponseMapper)
-                .collect(Collectors.toList());
-
-        return collect;
+        return victimResponseDTOCustomPage;
     }
 
     @Override

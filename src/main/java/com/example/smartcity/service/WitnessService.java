@@ -2,6 +2,7 @@ package com.example.smartcity.service;
 
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.WitnessDTO;
+import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.payload.responseDTO.WitnessResponseDTO;
 import org.springframework.http.ResponseEntity;
 
@@ -15,7 +16,7 @@ public interface WitnessService {
 
     WitnessResponseDTO getWitnessById(UUID id);
 
-    List<WitnessResponseDTO> getAllWitnesses(Integer page);
+    CustomPage<WitnessResponseDTO> getAllWitnesses(Integer page);
 
     ApiResponse addWitness(WitnessDTO witnessDTO);
 

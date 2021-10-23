@@ -2,6 +2,7 @@ package com.example.smartcity.service.Mapper;
 
 import com.example.smartcity.entity.*;
 import com.example.smartcity.payload.responseDTO.*;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class Mappers {
-    public WitnessResponseDTO forWitnessResponseMapper(Witness witness) {
+    public static WitnessResponseDTO forWitnessResponseMapper(Witness witness) {
         return new WitnessResponseDTO(
                 witness.getId(),
                 witness.getCardNumber(),
@@ -19,10 +20,10 @@ public class Mappers {
                 witness.getPhoneNumber(),
                 witness.getRemark(),
                 witness.getPhotoId(),
-                this.crimeResponseDTOList(witness.getCrime())
+                crimeResponseDTOList(witness.getCrime())
         );
     }
-    public VictimResponseDTO forVictimResponseMapper(Victim victim){
+    public static VictimResponseDTO forVictimResponseMapper(Victim victim){
         return new VictimResponseDTO(
                 victim.getId(),
                 victim.getCardNumber(),
@@ -33,10 +34,10 @@ public class Mappers {
                 victim.getRemark(),
                 victim.getPhotoId(),
                 victim.isDead(),
-                this.crimeResponseDTOList(victim.getCrime())
+                crimeResponseDTOList(victim.getCrime())
         );
     }
-    public PrisonerResponseDTO forPrisonerResponseMapper(Prisoner prisoner){
+    public static PrisonerResponseDTO forPrisonerResponseMapper(Prisoner prisoner){
         return new PrisonerResponseDTO(
                 prisoner.getId(),
                 prisoner.getCardNumber(),
@@ -48,11 +49,11 @@ public class Mappers {
                 prisoner.getEndingDate(),
                 prisoner.isInPrison(),
                 prisoner.getPhotoId(),
-                this.crimeResponseDTOList(prisoner.getCrime())
+                crimeResponseDTOList(prisoner.getCrime())
         );
     }
 
-    public OfficerResponseDTO forOfficerResponseMapper(Officer officer){
+    public static OfficerResponseDTO forOfficerResponseMapper(Officer officer){
         if (officer==null) return null;
 
             return new OfficerResponseDTO(
@@ -61,13 +62,13 @@ public class Mappers {
                 officer.getFirstName(),
                 officer.getLastName(),
                 officer.getRank(),
-                this.forPoliceStationResponseMapper(officer.getPoliceStation()),
+                forPoliceStationResponseMapper(officer.getPoliceStation()),
                 officer.getBirthDate(),
                 officer.getCertificate(),
                 officer.getPhotoId()
         );
     }
-    public PoliceStationResponseDTO forPoliceStationResponseMapper(PoliceStation policeStation){
+    public static PoliceStationResponseDTO forPoliceStationResponseMapper(PoliceStation policeStation){
         if (policeStation==null) return null;
 
             return new PoliceStationResponseDTO(
@@ -78,7 +79,7 @@ public class Mappers {
                 policeStation.getRemark()
         );
     }
-    public CrimeResponseDTO forCrimeResponseMapper(Crime crime){
+    public static CrimeResponseDTO forCrimeResponseMapper(Crime crime){
         if (crime==null) return null;
             return new CrimeResponseDTO(
                 crime.getId(),
@@ -86,18 +87,83 @@ public class Mappers {
                 crime.getAddress(),
                 crime.getCrimeTime(),
                 crime.getCrimeDescription(),
-                this.forCrimeOfficerList(crime.getOfficers()),
-                this.forPoliceStationResponseMapper(crime.getPoliceStation()),
+                officerResponseDTOList(crime.getOfficers()),
+                forPoliceStationResponseMapper(crime.getPoliceStation()),
                 crime.getCrimeReportStatus(),
                 crime.getCrimeStatus(),
                 crime.getCrimeType()
         );
     }
-    public List<OfficerResponseDTO> forCrimeOfficerList(List<Officer> officerList){
-        return officerList.stream().map(this::forOfficerResponseMapper).collect(Collectors.toList());
+
+    public static CustomPage<PoliceStationResponseDTO> policeStationCustomPage(Page<PoliceStation> policeStationsPage) {
+        return new CustomPage<> (
+                policeStationsPage.getContent().stream().map(Mappers::forPoliceStationResponseMapper).collect(Collectors.toList()),
+                policeStationsPage.getNumberOfElements(),
+                policeStationsPage.getNumber(),
+                policeStationsPage.getTotalElements(),
+                policeStationsPage.getTotalPages(),
+                policeStationsPage.getSize()
+        );
     }
-    public List<CrimeResponseDTO> crimeResponseDTOList(List<Crime> crimes){
-        return crimes.stream().map(this::forCrimeResponseMapper).collect(Collectors.toList());
+    public static CustomPage<WitnessResponseDTO> witnessCustomPage(Page<Witness> witnessPage) {
+        return new CustomPage<> (
+                witnessPage.getContent().stream().map(Mappers::forWitnessResponseMapper).collect(Collectors.toList()),
+                witnessPage.getNumberOfElements(),
+                witnessPage.getNumber(),
+                witnessPage.getTotalElements(),
+                witnessPage.getTotalPages(),
+                witnessPage.getSize()
+        );
     }
+
+    public static CustomPage<VictimResponseDTO> victimCustomPage(Page<Victim> victims) {
+        return new CustomPage<> (
+                victims.getContent().stream().map(Mappers::forVictimResponseMapper).collect(Collectors.toList()),
+                victims.getNumberOfElements(),
+                victims.getNumber(),
+                victims.getTotalElements(),
+                victims.getTotalPages(),
+                victims.getSize()
+        );
+    }
+    public static CustomPage<PrisonerResponseDTO> prisonerCustomPage(Page<Prisoner> prisonerPage) {
+        return new CustomPage<> (
+                prisonerPage.getContent().stream().map(Mappers::forPrisonerResponseMapper).collect(Collectors.toList()),
+                prisonerPage.getNumberOfElements(),
+                prisonerPage.getNumber(),
+                prisonerPage.getTotalElements(),
+                prisonerPage.getTotalPages(),
+                prisonerPage.getSize()
+        );
+    }
+
+    public static CustomPage<OfficerResponseDTO> officerCustomPage(Page<Officer> officerPage) {
+        return new CustomPage<> (
+                officerPage.getContent().stream().map(Mappers::forOfficerResponseMapper).collect(Collectors.toList()),
+                officerPage.getNumberOfElements(),
+                officerPage.getNumber(),
+                officerPage.getTotalElements(),
+                officerPage.getTotalPages(),
+                officerPage.getSize()
+        );
+    }
+
+    public static CustomPage<CrimeResponseDTO> CrimeCustomPage(Page<Crime> crimePage) {
+        return new CustomPage<> (
+                crimePage.getContent().stream().map(Mappers::forCrimeResponseMapper).collect(Collectors.toList()),
+                crimePage.getNumberOfElements(),
+                crimePage.getNumber(),
+                crimePage.getTotalElements(),
+                crimePage.getTotalPages(),
+                crimePage.getSize()
+        );
+    }
+    public static List<OfficerResponseDTO> officerResponseDTOList(List<Officer> officerList){
+        return officerList.stream().map(Mappers::forOfficerResponseMapper).collect(Collectors.toList());
+    }
+    public static List<CrimeResponseDTO> crimeResponseDTOList(List<Crime> crimes){
+        return crimes.stream().map(Mappers::forCrimeResponseMapper).collect(Collectors.toList());
+    }
+
 }
 

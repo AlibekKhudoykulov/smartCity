@@ -1,6 +1,7 @@
 package com.example.smartcity.controller;
 
 import com.example.smartcity.payload.responseDTO.CrimeResponseDTO;
+import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.service.impl.CrimeServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.CrimeDTO;
@@ -17,15 +18,16 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/crime")
 @RequiredArgsConstructor
+@CrossOrigin
 public class CrimeController {
 
     private final CrimeServiceImpl crimeService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
-    public ResponseEntity<List<CrimeResponseDTO>> getAll(@RequestParam Integer page){
-        List<CrimeResponseDTO> allCrimes = crimeService.getAllCrimes(page);
-        return new ResponseEntity<List<CrimeResponseDTO>>(allCrimes, HttpStatus.OK);
+    public ResponseEntity<CustomPage<CrimeResponseDTO>> getAll(@RequestParam Integer page){
+        CustomPage<CrimeResponseDTO> allCrimes = crimeService.getAllCrimes(page);
+        return new ResponseEntity<CustomPage<CrimeResponseDTO>>(allCrimes, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

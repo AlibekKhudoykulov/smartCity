@@ -1,5 +1,6 @@
 package com.example.smartcity.controller;
 
+import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.payload.responseDTO.OfficerResponseDTO;
 import com.example.smartcity.service.impl.OfficerServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
@@ -17,15 +18,16 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/officer")
 @RequiredArgsConstructor
+@CrossOrigin
 public class OfficerController {
 
     private final OfficerServiceImpl officerService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
-    public ResponseEntity<List<OfficerResponseDTO>> getAll(@RequestParam Integer page){
-        List<OfficerResponseDTO> allOfficers = officerService.getAllOfficers(page);
-        return new ResponseEntity<List<OfficerResponseDTO>>(allOfficers, HttpStatus.OK);
+    public ResponseEntity<CustomPage<OfficerResponseDTO>> getAll(@RequestParam Integer page){
+        CustomPage<OfficerResponseDTO> allOfficers = officerService.getAllOfficers(page);
+        return new ResponseEntity<CustomPage<OfficerResponseDTO>>(allOfficers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

@@ -1,11 +1,11 @@
 package com.example.smartcity.controller;
 
+import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.payload.responseDTO.PrisonerResponseDTO;
 import com.example.smartcity.service.impl.PrisonerServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.PrisonerDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,15 +17,16 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/prisoner")
 @RequiredArgsConstructor
+@CrossOrigin
 public class PrisonerController {
 
     private final PrisonerServiceImpl prisonerService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
-    public ResponseEntity<List<PrisonerResponseDTO>> getAll(@RequestParam Integer page){
-        List<PrisonerResponseDTO> allArrestedPeople = prisonerService.getAllArrestedPeople(page);
-        return new ResponseEntity<List<PrisonerResponseDTO>>(allArrestedPeople, HttpStatus.OK);
+    public ResponseEntity<CustomPage<PrisonerResponseDTO>> getAll(@RequestParam Integer page){
+        CustomPage<PrisonerResponseDTO> allArrestedPeople = prisonerService.getAllArrestedPeople(page);
+        return new ResponseEntity<CustomPage<PrisonerResponseDTO>>(allArrestedPeople, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
