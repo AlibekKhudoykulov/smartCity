@@ -1,9 +1,20 @@
 package com.example.smartcity.service.impl;
 
+import com.example.smartcity.entity.Crime;
+import com.example.smartcity.entity.MorgueRequest;
+import com.example.smartcity.payload.responseDTO.CrimeResponseDTO;
+import com.example.smartcity.payload.responseDTO.CustomPage;
+import com.example.smartcity.payload.responseDTO.MorgueResponseDTO;
+import com.example.smartcity.repository.MorgueRequestRepository;
 import com.example.smartcity.security.hmac.HMACUtil;
 import com.example.smartcity.service.HTTPRequestService;
+import com.example.smartcity.service.Mapper.Mappers;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -54,4 +65,6 @@ public class HTTPRequestServiceImpl implements HTTPRequestService {
                 .toEntity(String.class)
                 .block();
     }
+
+
 }

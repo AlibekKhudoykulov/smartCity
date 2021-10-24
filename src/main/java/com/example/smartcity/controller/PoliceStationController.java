@@ -23,7 +23,7 @@ public class PoliceStationController {
 
     private final PoliceStationServiceImpl policeStationService;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
+
     @GetMapping
     public ResponseEntity<CustomPage<PoliceStationResponseDTO>> getAll(@RequestParam Integer page){
         CustomPage<PoliceStationResponseDTO> allStations = policeStationService.getAllStations(page);

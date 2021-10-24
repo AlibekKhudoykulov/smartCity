@@ -1,6 +1,8 @@
 package com.example.smartcity.service.impl;
 
+import com.example.smartcity.entity.Role;
 import com.example.smartcity.entity.User;
+import com.example.smartcity.entity.enums.RoleName;
 import com.example.smartcity.payload.UserInfo;
 import com.example.smartcity.repository.UserRepository;
 import com.example.smartcity.security.JwtProvider;
@@ -41,7 +43,7 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
 
     @Override
     public ResponseEntity<?> login(LoginDTO loginDTO) {
-         try {
+        try {
             Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     loginDTO.getUsername(),
                     loginDTO.getPassword()
@@ -57,14 +59,21 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
     @Override
     public ResponseEntity<?> authToken(User user) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if(user==null) {
+        boolean isAdmin = false;
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse("Unauthorized", false));
         }
+        for (Role role : user.getRoles()) {
+            if (role.getRoleName()== RoleName.ROLE_ADMIN){
+                isAdmin = true;
+            }
+        }
+
         UserInfo userInfo = UserInfo.builder()
                 .username(user.getUsername())
-                .roles(user.getRoles()).build();
-        return ResponseEntity.ok().body(new ApiResponse("Success!",true, userInfo));
+                .roles(user.getRoles()).
+                isAdmin(isAdmin).build();
+        return ResponseEntity.ok().body(new ApiResponse("Success!", true, userInfo));
     }
 
 }

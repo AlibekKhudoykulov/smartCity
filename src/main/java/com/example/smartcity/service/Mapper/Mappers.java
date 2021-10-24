@@ -23,6 +23,18 @@ public class Mappers {
                 crimeResponseDTOList(witness.getCrime())
         );
     }
+
+    public static MorgueResponseDTO forMorgueResponseMapper(MorgueRequest morgueRequest){
+        return new MorgueResponseDTO(
+                morgueRequest.getId(),
+                morgueRequest.getCorpseCardNumber(),
+                morgueRequest.getOfficerCardNumber(),
+                morgueRequest.getDeathDate(),
+                morgueRequest.getCauses(),
+                morgueRequest.isEndExamination(),
+                forOfficerResponseMapper(morgueRequest.getOfficer())
+        );
+    }
     public static VictimResponseDTO forVictimResponseMapper(Victim victim){
         return new VictimResponseDTO(
                 victim.getId(),
@@ -105,6 +117,18 @@ public class Mappers {
                 policeStationsPage.getSize()
         );
     }
+
+    public static CustomPage<MorgueResponseDTO> MorgueCustomPage(Page<MorgueRequest> morgueRequest) {
+        return new CustomPage<> (
+                morgueRequest.getContent().stream().map(Mappers::forMorgueResponseMapper).collect(Collectors.toList()),
+                morgueRequest.getNumberOfElements(),
+                morgueRequest.getNumber(),
+                morgueRequest.getTotalElements(),
+                morgueRequest.getTotalPages(),
+                morgueRequest.getSize()
+        );
+    }
+
     public static CustomPage<WitnessResponseDTO> witnessCustomPage(Page<Witness> witnessPage) {
         return new CustomPage<> (
                 witnessPage.getContent().stream().map(Mappers::forWitnessResponseMapper).collect(Collectors.toList()),
