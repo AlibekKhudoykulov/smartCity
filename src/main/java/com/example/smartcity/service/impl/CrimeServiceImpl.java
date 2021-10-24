@@ -88,14 +88,15 @@ public class CrimeServiceImpl implements CrimeService {
         PoliceStation policeStation = checkPoliceStation(crimeDTO.getPoliceStationId());
 
         crime.setName(crimeDTO.getName());
-        crime.setAddress(crime.getAddress());
+        crime.setAddress(crimeDTO.getAddress());
         crime.setCrimeDescription(crimeDTO.getCrimeDescription());
         crime.setOfficers(officerList);
-        crime.setPoliceStation(policeStationRepository.getOne(crimeDTO.getPoliceStationId()));
+        crime.setPoliceStation(policeStation);
         crime.setCrimeReportStatus(crimeDTO.getCrimeReportStatus());
         crime.setCrimeType(crimeDTO.getCrimeType());
         crime.setCrimeStatus(crimeDTO.getCrimeStatus());
 
+        crimeRepository.save(crime);
         return new ApiResponse("Edited successfully",true);
     }
 

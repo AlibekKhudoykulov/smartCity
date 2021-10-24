@@ -8,5 +8,6 @@ import java.util.UUID;
 
 public interface PoliceStationRepository extends JpaRepository<PoliceStation, UUID> {
     Optional<PoliceStation> findByName(String name);
+    boolean existsByNameAndIdNot(String name,UUID uuid);
 
 }

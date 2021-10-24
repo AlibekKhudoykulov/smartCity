@@ -100,10 +100,10 @@ public class PrisonerServiceImpl implements PrisonerService {
         prisoner.setEndingDate(prisonerDTO.getEndingDate());
         prisoner.setPhotoId(citizenByCardNumber.getPhotoId());
 
-        if (prisonerDTO.isInPrison()){
+        if (prisonerDTO.isInPrison() && prisoner.isInPrison()==false){
             prisoner.setInPrison(prisonerDTO.isInPrison());
             citizenExternalApiService.sendPrisonerToCityManagement(prisonerDTO.getCardNumber());
-        }else {
+        }else if (prisonerDTO.isInPrison()==false && prisoner.isInPrison()==true){
             prisoner.setInPrison(prisoner.isInPrison());
             citizenExternalApiService.sendLiberationToCityManagement(prisonerDTO.getCardNumber());
         }

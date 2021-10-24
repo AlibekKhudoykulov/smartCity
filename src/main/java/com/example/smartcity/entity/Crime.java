@@ -7,6 +7,8 @@ import com.example.smartcity.entity.template.AbsEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -18,6 +20,8 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE crime SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 public class Crime extends AbsEntity {
 
     @Column(nullable = false)
@@ -46,5 +50,25 @@ public class Crime extends AbsEntity {
     @Enumerated(EnumType.STRING)
     private CrimeType crimeType;
 
+    private boolean deleted = Boolean.FALSE;
 
+    public Crime(String name,
+                 String address,
+                 LocalDateTime crimeTime,
+                 String crimeDescription,
+                 List<Officer> officers,
+                 PoliceStation policeStation,
+                 CrimeReportStatus crimeReportStatus,
+                 CrimeStatus crimeStatus,
+                 CrimeType crimeType) {
+        this.name = name;
+        this.address = address;
+        this.crimeTime = crimeTime;
+        this.crimeDescription = crimeDescription;
+        this.officers = officers;
+        this.policeStation = policeStation;
+        this.crimeReportStatus = crimeReportStatus;
+        this.crimeStatus = crimeStatus;
+        this.crimeType = crimeType;
+    }
 }

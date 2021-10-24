@@ -109,12 +109,12 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
             httpRequestService.makePOSTHTTPCallUsingHMAC(
                     "POLICE",
                     "check_certificate",
-                    "http://citymanagementfull-env.eba-tixcjyas.us-east-2.elasticbeanstalk.com/api/v1/request/police/certificate",
+                    "http://citymanagementfull-env.eba-tixcjyas.us-east-2.elasticbeanstalk.com//api/v1/request/police/certificate",
                     "policeKey",
                     reqBody
             );
         } catch (WebClientResponseException webClientResponseException) {
-            throw new RestException("Certificate didn't send for checking but saved in database", HttpStatus.CONFLICT);
+            throw new RestException("Certificate didn't send for checking", HttpStatus.CONFLICT);
         }
     }
 
@@ -139,7 +139,7 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
                     reqBody
             );
         } catch (WebClientResponseException webClientResponseException) {
-            throw new RestException("Death info didn't send to City Management but saved in database", HttpStatus.CONFLICT);
+            throw new RestException("Death info didn't send to City Management", HttpStatus.CONFLICT);
         }
     }
 

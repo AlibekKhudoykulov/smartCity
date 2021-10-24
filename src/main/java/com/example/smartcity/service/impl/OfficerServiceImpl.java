@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -64,6 +65,7 @@ public class OfficerServiceImpl implements OfficerService {
     }
 
     @Override
+    @Transactional
     public ApiResponse addOfficer(OfficerDTO officerDTO) {
         Optional<Officer> byCardNumber = officerRepository.findByCardNumber(officerDTO.getCardNumber());
         if (byCardNumber.isPresent()) throw new RestException("This card number already added",HttpStatus.CONFLICT);

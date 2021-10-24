@@ -67,6 +67,8 @@ public class PoliceStationServiceImpl implements PoliceStationService {
     public ApiResponse editStation(UUID id, PoliceStationDTO policeStationDTO) {
         PoliceStation station = policeStationRepository.findById(id)
                 .orElseThrow(() -> new RestException("Police Station Not found",HttpStatus.NOT_FOUND));
+        if (policeStationRepository.existsByNameAndIdNot(policeStationDTO.getName(),id)) throw new RestException("Already exists this Police Station",HttpStatus.CONFLICT);
+
         station.setName(policeStationDTO.getName());
         station.setAddress(policeStationDTO.getAddress());
         station.setPhoneNumber(policeStationDTO.getPhoneNumber());

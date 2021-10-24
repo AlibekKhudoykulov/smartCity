@@ -10,6 +10,9 @@ import com.example.smartcity.payload.PoliceStationDTO;
 import com.example.smartcity.payload.VictimDTO;
 import com.example.smartcity.payload.requestDTO.CityManagementRequestDTO;
 import com.example.smartcity.payload.requestDTO.MorgueRequestDTO;
+import com.example.smartcity.payload.responseDTO.CrimeResponseDTO;
+import com.example.smartcity.payload.responseDTO.CustomPage;
+import com.example.smartcity.payload.responseDTO.MorgueResponseDTO;
 import com.example.smartcity.payload.responseDTO.OfficerResponseDTO;
 import com.example.smartcity.repository.MorgueRequestRepository;
 import com.example.smartcity.repository.OfficerRepository;
@@ -18,6 +21,10 @@ import com.example.smartcity.repository.VictimRepository;
 import com.example.smartcity.service.Mapper.Mappers;
 import com.example.smartcity.service.ReceiveRequestAPIService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -59,30 +66,30 @@ public class ReceiveRequestAPIServiceImpl implements ReceiveRequestAPIService {
     @Override
     public ResponseEntity<?> askPoliceOfficerForMorgue(MorgueRequestDTO morgueRequestDTO) {
 
-            MorgueRequest morgueRequest = new MorgueRequest();
-            morgueRequest.setCorpseCardNumber(morgueRequestDTO.getCorpseCardNumber());
-            for (Officer officer : officerRepository.findAllByRank(OfficerRank.EXPERT)) {
-                Optional<MorgueRequest> byOfficerCardNumber = morgueRequestRepository.findByOfficer(officer);
-                if (!byOfficerCardNumber.isPresent()) {
+        MorgueRequest morgueRequest = new MorgueRequest();
+        morgueRequest.setCorpseCardNumber(morgueRequestDTO.getCorpseCardNumber());
+        for (Officer officer : officerRepository.findAllByRank(OfficerRank.EXPERT)) {
+            Optional<MorgueRequest> byOfficerCardNumber = morgueRequestRepository.findByOfficer(officer);
+            if (!byOfficerCardNumber.isPresent()) {
+                OfficerResponseDTO officerResponseDTO = mappers.forOfficerResponseMapper(officer);
+                morgueRequest.setOfficer(officer);
+                morgueRequest.setOfficerCardNumber(officer.getCardNumber());
+                morgueRequestRepository.save(morgueRequest);
+                return ResponseEntity.status(200).body(officerResponseDTO);
+            } else {
+                boolean endExamination = byOfficerCardNumber.get().isEndExamination();
+                if (endExamination) {
                     OfficerResponseDTO officerResponseDTO = mappers.forOfficerResponseMapper(officer);
                     morgueRequest.setOfficer(officer);
                     morgueRequest.setOfficerCardNumber(officer.getCardNumber());
                     morgueRequestRepository.save(morgueRequest);
                     return ResponseEntity.status(200).body(officerResponseDTO);
-                } else {
-                    boolean endExamination = byOfficerCardNumber.get().isEndExamination();
-                    if (endExamination) {
-                        OfficerResponseDTO officerResponseDTO = mappers.forOfficerResponseMapper(officer);
-                        morgueRequest.setOfficer(officer);
-                        morgueRequest.setOfficerCardNumber(officer.getCardNumber());
-                        morgueRequestRepository.save(morgueRequest);
-                        return ResponseEntity.status(200).body(officerResponseDTO);
-                    }
                 }
             }
+        }
 
-        ApiResponse apiResponse=new ApiResponse("All officers are busy",false);
-        return ResponseEntity.status(apiResponse.isSuccess()?HttpStatus.OK:HttpStatus.NOT_FOUND).body(apiResponse);
+        ApiResponse apiResponse = new ApiResponse("All officers are busy", false);
+        return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(apiResponse);
     }
 
     @Override
@@ -105,4 +112,13 @@ public class ReceiveRequestAPIServiceImpl implements ReceiveRequestAPIService {
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.OK : HttpStatus.CONFLICT).
                 body(apiResponse);
     }
+
+    @Override
+    public CustomPage<MorgueResponseDTO> getAllRequests(Integer page) {
+        Pageable pageableAndSortedByTime = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+        Page<MorgueRequest> all = morgueRequestRepository.findAll(pageableAndSortedByTime);
+        CustomPage<MorgueResponseDTO> morgueResponseDTOCustomPage = Mappers.MorgueCustomPage(all);
+        return morgueResponseDTOCustomPage;
+    }
 }
+

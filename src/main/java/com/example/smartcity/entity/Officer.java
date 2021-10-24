@@ -6,6 +6,8 @@ import com.example.smartcity.entity.template.AbsEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -17,6 +19,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE officer SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 public class Officer extends AbsEntity {
 
     private long cardNumber;
@@ -37,4 +41,23 @@ public class Officer extends AbsEntity {
     @ManyToOne
     private PoliceStation policeStation;
 
+    private boolean deleted = Boolean.FALSE;
+
+    public Officer(long cardNumber,
+                   String firstName,
+                   String lastName,
+                   Date birthDate,
+                   long certificate,
+                   OfficerRank rank,
+                   UUID photoId,
+                   PoliceStation policeStation) {
+        this.cardNumber = cardNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.certificate = certificate;
+        this.rank = rank;
+        this.photoId = photoId;
+        this.policeStation = policeStation;
+    }
 }

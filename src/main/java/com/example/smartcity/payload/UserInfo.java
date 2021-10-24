@@ -12,4 +12,5 @@ import lombok.experimental.SuperBuilder;
 public class UserInfo {
     private String username;
     private Object roles;
+    private boolean isAdmin;
 }
