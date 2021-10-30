@@ -98,6 +98,7 @@ public class VictimServiceImpl implements VictimService {
         victim.setSurname(citizenByCardNumber.getSurname());
         victim.setBirthDate(citizenByCardNumber.getBirthDate());
         victim.setPhotoId(citizenByCardNumber.getPhotoId());
+        victim.setDeathDate(victimDTO.getDeathDate());
         victim.setRemark(victimDTO.getRemark());
         victim.setDead(victimDTO.isDead());
 

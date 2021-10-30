@@ -82,8 +82,6 @@ public class PrisonerServiceImpl implements PrisonerService {
         Prisoner prisoner = prisonerRepository.findById(id)
                 .orElseThrow(()-> new RestException("Not found",HttpStatus.NOT_FOUND));
 
-        Optional<Prisoner> byCardNumberAndIdNot = prisonerRepository.findByCardNumberAndIdNot(prisonerDTO.getCardNumber(), id);
-        if (byCardNumberAndIdNot.isPresent()) throw  new RestException("This CardNumber Already added",HttpStatus.CONFLICT);
         CitizenDTO citizenByCardNumber = citizenExternalApiService.getCitizenByCardNumber(prisonerDTO.getCardNumber());
 
         List<Crime> crimeList = citizenExternalApiService.getCrimesWithId(prisonerDTO.getCrimes());
@@ -104,7 +102,7 @@ public class PrisonerServiceImpl implements PrisonerService {
             prisoner.setInPrison(prisonerDTO.isInPrison());
             citizenExternalApiService.sendPrisonerToCityManagement(prisonerDTO.getCardNumber());
         }else if (prisonerDTO.isInPrison()==false && prisoner.isInPrison()==true){
-            prisoner.setInPrison(prisoner.isInPrison());
+            prisoner.setInPrison(prisonerDTO.isInPrison());
             citizenExternalApiService.sendLiberationToCityManagement(prisonerDTO.getCardNumber());
         }
 

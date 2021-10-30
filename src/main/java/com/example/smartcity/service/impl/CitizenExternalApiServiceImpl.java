@@ -109,7 +109,7 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
             httpRequestService.makePOSTHTTPCallUsingHMAC(
                     "POLICE",
                     "check_certificate",
-                    "http://citymanagementfull-env.eba-tixcjyas.us-east-2.elasticbeanstalk.com//api/v1/request/police/certificate",
+                    "http://citymanagementfull-env.eba-tixcjyas.us-east-2.elasticbeanstalk.com/api/v1/request/police/certificate",
                     "policeKey",
                     reqBody
             );
