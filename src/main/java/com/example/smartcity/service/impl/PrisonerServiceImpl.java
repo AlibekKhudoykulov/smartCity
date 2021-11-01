@@ -82,6 +82,9 @@ public class PrisonerServiceImpl implements PrisonerService {
         Prisoner prisoner = prisonerRepository.findById(id)
                 .orElseThrow(()-> new RestException("Not found",HttpStatus.NOT_FOUND));
 
+        boolean byCardNumberAndIdNot = prisonerRepository.existsByCardNumberAndIdNot(prisonerDTO.getCardNumber(), id);
+        if (byCardNumberAndIdNot) throw new RestException("This Card number already added",HttpStatus.CONFLICT);
+
         CitizenDTO citizenByCardNumber = citizenExternalApiService.getCitizenByCardNumber(prisonerDTO.getCardNumber());
 
         List<Crime> crimeList = citizenExternalApiService.getCrimesWithId(prisonerDTO.getCrimes());
@@ -89,6 +92,7 @@ public class PrisonerServiceImpl implements PrisonerService {
         if (crimeList!=null) {
             prisoner.setCrime(crimeList);
         }
+
         prisoner.setCardNumber(prisonerDTO.getCardNumber());
         prisoner.setFirstName(citizenByCardNumber.getFirstName());
         prisoner.setSurname(citizenByCardNumber.getSurname());
@@ -100,13 +104,19 @@ public class PrisonerServiceImpl implements PrisonerService {
 
         if (prisonerDTO.isInPrison() && prisoner.isInPrison()==false){
             prisoner.setInPrison(prisonerDTO.isInPrison());
-            citizenExternalApiService.sendPrisonerToCityManagement(prisonerDTO.getCardNumber());
         }else if (prisonerDTO.isInPrison()==false && prisoner.isInPrison()==true){
             prisoner.setInPrison(prisonerDTO.isInPrison());
-            citizenExternalApiService.sendLiberationToCityManagement(prisonerDTO.getCardNumber());
         }
 
         prisonerRepository.save(prisoner);
+
+        if (prisoner.isInPrison()) {
+            citizenExternalApiService.sendPrisonerToCityManagement(prisonerDTO.getCardNumber());
+        } else {
+            citizenExternalApiService.sendLiberationToCityManagement(prisonerDTO.getCardNumber());
+        }
+
+
         return new ApiResponse("Prisoner Updated Successfully",true);
 
     }

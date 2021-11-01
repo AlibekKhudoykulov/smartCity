@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class WitnessDTO {
 
+    @NotNull(message = "Card number must not be empty")
     private long cardNumber;
 
     private String phoneNumber;

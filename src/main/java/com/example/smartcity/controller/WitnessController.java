@@ -25,7 +25,6 @@ public class WitnessController {
 
     private final WitnessServiceImpl witnessService;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<CustomPage<WitnessResponseDTO>> getAll(@RequestParam Integer page){
         CustomPage<WitnessResponseDTO> allWitnesses = witnessService.getAllWitnesses(page);
@@ -47,7 +46,7 @@ public class WitnessController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody WitnessDTO witnessDTO){
+    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody @Valid WitnessDTO witnessDTO){
         ApiResponse apiResponse = witnessService.editWitness(id, witnessDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 

@@ -26,7 +26,6 @@ public class CrimeDTO {
 
     private List<UUID> officers;
 
-    @NotBlank(message = "CrimeType must not be empty")
     private CrimeType crimeType;
 
     private UUID policeStationId;

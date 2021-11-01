@@ -6,13 +6,12 @@ import com.example.smartcity.service.impl.CrimeServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.CrimeDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -23,7 +22,6 @@ public class CrimeController {
 
     private final CrimeServiceImpl crimeService;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<CustomPage<CrimeResponseDTO>> getAll(@RequestParam Integer page){
         CustomPage<CrimeResponseDTO> allCrimes = crimeService.getAllCrimes(page);
@@ -37,14 +35,14 @@ public class CrimeController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> addCrime(@RequestBody CrimeDTO crimeDTO){
+    public ResponseEntity<ApiResponse> addCrime(@RequestBody @Valid CrimeDTO crimeDTO){
         ApiResponse apiResponse = crimeService.addCrime(crimeDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> editCrime(@PathVariable UUID id,@RequestBody CrimeDTO crimeDTO){
+    public ResponseEntity<ApiResponse> editCrime(@PathVariable UUID id,@RequestBody @Valid CrimeDTO crimeDTO){
         ApiResponse apiResponse = crimeService.editCrime(id, crimeDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 

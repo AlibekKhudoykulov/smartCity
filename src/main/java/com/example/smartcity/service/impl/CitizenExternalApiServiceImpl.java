@@ -192,27 +192,4 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
             throw new RestException("Liberation didn't send for opening account but saved in database", HttpStatus.CONFLICT);
         }
     }
-
-    public OfficerResponseDTO sendOfficer(Officer officer) {
-        PoliceStationDTO policeStationDTO = null;
-        if (officer.getPoliceStation() != null) {
-            policeStationDTO = new PoliceStationDTO(
-                    officer.getPoliceStation().getName(),
-                    officer.getPoliceStation().getPhoneNumber(),
-                    officer.getPoliceStation().getAddress(),
-                    officer.getPoliceStation().getRemark()
-            );
-        }
-        OfficerResponseDTO officerResponseDTO = OfficerResponseDTO.builder()
-                .uuid(officer.getId())
-                .cardNumber(officer.getCardNumber())
-                .firstName(officer.getFirstName())
-                .lastName(officer.getLastName())
-                .rank(officer.getRank())
-                .policeStation(mappers.forPoliceStationResponseMapper(officer.getPoliceStation()))
-                .build();
-        return officerResponseDTO;
-    }
-
-
 }

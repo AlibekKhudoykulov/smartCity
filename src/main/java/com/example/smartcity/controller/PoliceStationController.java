@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +39,7 @@ public class PoliceStationController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
-    public ResponseEntity<ApiResponse> add(@RequestBody PoliceStationDTO policeStationDTO){
+    public ResponseEntity<ApiResponse> add(@RequestBody @Valid PoliceStationDTO policeStationDTO){
         ApiResponse apiResponse = policeStationService.addStation(policeStationDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 
@@ -46,7 +47,7 @@ public class PoliceStationController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody PoliceStationDTO policeStationDTO){
+    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody @Valid PoliceStationDTO policeStationDTO){
         ApiResponse apiResponse = policeStationService.editStation(id, policeStationDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 

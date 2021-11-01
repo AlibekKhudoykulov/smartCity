@@ -9,5 +9,5 @@ import java.util.UUID;
 public interface PrisonerRepository extends JpaRepository<Prisoner, UUID> {
     Optional<Prisoner> findByCardNumber(Long cardNumber);
 
-    boolean existsByCardNumberAndIdNot(long cardNumber,UUID id);
+    boolean existsByCardNumberAndIdNot(Long cardNumber,UUID id);
 }

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +23,6 @@ public class PrisonerController {
 
     private final PrisonerServiceImpl prisonerService;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<CustomPage<PrisonerResponseDTO>> getAll(@RequestParam Integer page){
         CustomPage<PrisonerResponseDTO> allArrestedPeople = prisonerService.getAllArrestedPeople(page);
@@ -37,7 +37,7 @@ public class PrisonerController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
-    public ResponseEntity<ApiResponse> add(@RequestBody PrisonerDTO prisonerDTO){
+    public ResponseEntity<ApiResponse> add(@RequestBody @Valid PrisonerDTO prisonerDTO){
         ApiResponse apiResponse = prisonerService.addPrisoner(prisonerDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 
@@ -45,7 +45,7 @@ public class PrisonerController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody PrisonerDTO prisonerDTO){
+    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody @Valid PrisonerDTO prisonerDTO){
         ApiResponse apiResponse = prisonerService.editPrisoner(id, prisonerDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 

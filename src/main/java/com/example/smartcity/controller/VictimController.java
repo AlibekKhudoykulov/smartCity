@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +24,6 @@ public class VictimController {
 
     private final VictimServiceImpl victimService;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<CustomPage<VictimResponseDTO>> getAll(@RequestParam Integer page){
         CustomPage<VictimResponseDTO> allVictims = victimService.getAllVictims(page);
@@ -38,14 +38,14 @@ public class VictimController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
-    public ResponseEntity<ApiResponse> add(@RequestBody VictimDTO victimDTO){
+    public ResponseEntity<ApiResponse> add(@RequestBody @Valid VictimDTO victimDTO){
         ApiResponse apiResponse = victimService.addVictim(victimDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody VictimDTO victimDTO){
+    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody @Valid VictimDTO victimDTO){
         ApiResponse apiResponse = victimService.editVictim(id, victimDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 

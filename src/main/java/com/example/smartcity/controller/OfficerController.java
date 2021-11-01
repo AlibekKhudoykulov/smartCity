@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +24,6 @@ public class OfficerController {
 
     private final OfficerServiceImpl officerService;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @GetMapping
     public ResponseEntity<CustomPage<OfficerResponseDTO>> getAll(@RequestParam Integer page){
         CustomPage<OfficerResponseDTO> allOfficers = officerService.getAllOfficers(page);
@@ -44,7 +44,7 @@ public class OfficerController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PostMapping
-    public ResponseEntity<ApiResponse> add(@RequestBody OfficerDTO officerDTO){
+    public ResponseEntity<ApiResponse> add(@RequestBody @Valid OfficerDTO officerDTO){
         ApiResponse apiResponse = officerService.addOfficer(officerDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
 
@@ -52,7 +52,7 @@ public class OfficerController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody OfficerDTO officerDTO){
+    public ResponseEntity<ApiResponse> edit(@PathVariable UUID id,@RequestBody @Valid OfficerDTO officerDTO){
         ApiResponse apiResponse = officerService.editOfficer(id, officerDTO);
         return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.ACCEPTED);
     }
