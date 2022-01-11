@@ -21,7 +21,6 @@ public class CrimeServiceImpl implements CrimeService {
     private final PoliceStationRepository policeStationRepository;
     private final OfficerRepository officerRepository;
 
-
     @Override
     public ApiResponse getAllCrimes() {
         List<Crime> allCrimes = crimeRepository.findAll();

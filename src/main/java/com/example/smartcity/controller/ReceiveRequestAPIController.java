@@ -18,7 +18,7 @@ public class ReceiveRequestAPIController {
 
     @PostMapping("/certificate")
     @AuthorizeRequest
-    public ResponseEntity<?> creatingCheckingCertificateRequest(@RequestBody CityManagementRequestDTO cityManagementRequestDTO){
+    public ResponseEntity<?> checkingCertificateRequest(@RequestBody CityManagementRequestDTO cityManagementRequestDTO){
         return receiveRequestAPIService.getCheckingCertificate(cityManagementRequestDTO);
     }
 
