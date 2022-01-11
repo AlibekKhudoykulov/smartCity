@@ -32,7 +32,6 @@ public class CrimeServiceImpl implements CrimeService {
     private final CitizenExternalApiServiceImpl citizenExternalApiService;
     private final Mappers mappers;
 
-
     @Override
     public CustomPage<CrimeResponseDTO> getAllCrimes(Integer page) {
         Pageable pageableAndSortedByTime = PageRequest.of(page,10, Sort.by("createdAt").descending());

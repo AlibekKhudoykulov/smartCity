@@ -53,10 +53,11 @@ public class DataLoader implements CommandLineRunner {
                     true
             );
             userRepository.save(user);
-
+            
             List<HMACSecretKey> hmacSecretKeys=new ArrayList<>();
             hmacSecretKeys.add(new HMACSecretKey("police","policeKey"));
             hmacSecretKeys.add(new HMACSecretKey("recreation","recreationKey"));
+            hmacSecretKeys.add(new HMACSecretKey("CITY_MANAGEMENT","cityManagementSecretKey"));
             hmacSecretKeyRepository.saveAll(hmacSecretKeys);
         }
     }
