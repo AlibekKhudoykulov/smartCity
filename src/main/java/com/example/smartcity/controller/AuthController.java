@@ -1,6 +1,7 @@
 package com.example.smartcity.controller;
 
 
+import com.example.smartcity.constants.PathConstant;
 import com.example.smartcity.entity.User;
 import com.example.smartcity.security.CurrentUser;
 import com.example.smartcity.service.impl.AuthServiceImpl;
@@ -13,7 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/login")
+@RequestMapping(PathConstant.AUTH_CONTROLLER)
 @RequiredArgsConstructor
 public class AuthController {
 

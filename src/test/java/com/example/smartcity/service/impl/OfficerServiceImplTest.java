@@ -72,6 +72,8 @@ class OfficerServiceImplTest {
     @MockBean
     private UserServiceImpl userServiceImpl;
 
+
+
     @Test
     void testGetAllOfficers() {
         when(this.officerRepository.findAll((org.springframework.data.domain.Pageable) any()))
@@ -126,79 +128,6 @@ class OfficerServiceImplTest {
         assertEquals(1L, actualAllOfficers.getTotalElements());
         assertEquals(1, actualAllOfficers.getSize());
         assertEquals(1, actualAllOfficers.getNumberOfElements());
-        assertEquals(0, actualAllOfficers.getNumber());
-        verify(this.officerRepository).findAll((org.springframework.data.domain.Pageable) any());
-    }
-
-    @Test
-    void testGetAllOfficers3() {
-        PoliceStation policeStation = new PoliceStation();
-        policeStation.setRemark("createdAt");
-        policeStation.setId(UUID.randomUUID());
-        policeStation.setUpdatedAt(mock(Timestamp.class));
-        policeStation.setCreatedById(UUID.randomUUID());
-        policeStation.setCreatedAt(mock(Timestamp.class));
-        policeStation.setName("createdAt");
-        policeStation.setDeleted(true);
-        policeStation.setPhoneNumber("4105551212");
-        policeStation.setAddress("42 Main St");
-        policeStation.setUpdateById(UUID.randomUUID());
-
-        Officer officer = new Officer();
-        officer.setLastName("Doe");
-        officer.setId(UUID.randomUUID());
-        officer.setUpdatedAt(mock(Timestamp.class));
-        officer.setCreatedById(UUID.randomUUID());
-        officer.setCreatedAt(mock(Timestamp.class));
-        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-        officer.setBirthDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        officer.setDeleted(true);
-        officer.setCardNumber(0L);
-        officer.setCertificate(0L);
-        officer.setFirstName("Jane");
-        officer.setUpdateById(UUID.randomUUID());
-        officer.setRank(OfficerRank.DETECTIVE);
-        officer.setPoliceStation(policeStation);
-
-        PoliceStation policeStation1 = new PoliceStation();
-        policeStation1.setRemark("createdAt");
-        policeStation1.setId(UUID.randomUUID());
-        policeStation1.setUpdatedAt(mock(Timestamp.class));
-        policeStation1.setCreatedById(UUID.randomUUID());
-        policeStation1.setCreatedAt(mock(Timestamp.class));
-        policeStation1.setName("createdAt");
-        policeStation1.setDeleted(true);
-        policeStation1.setPhoneNumber("4105551212");
-        policeStation1.setAddress("42 Main St");
-        policeStation1.setUpdateById(UUID.randomUUID());
-
-        Officer officer1 = new Officer();
-        officer1.setLastName("Doe");
-        officer1.setId(UUID.randomUUID());
-        officer1.setUpdatedAt(mock(Timestamp.class));
-        officer1.setCreatedById(UUID.randomUUID());
-        officer1.setCreatedAt(mock(Timestamp.class));
-        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        officer1.setBirthDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-        officer1.setDeleted(true);
-        officer1.setCardNumber(0L);
-        officer1.setCertificate(0L);
-        officer1.setFirstName("Jane");
-        officer1.setUpdateById(UUID.randomUUID());
-        officer1.setRank(OfficerRank.DETECTIVE);
-        officer1.setPoliceStation(policeStation1);
-
-        ArrayList<Officer> officerList = new ArrayList<Officer>();
-        officerList.add(officer1);
-        officerList.add(officer);
-        PageImpl<Officer> pageImpl = new PageImpl<Officer>(officerList);
-        when(this.officerRepository.findAll((org.springframework.data.domain.Pageable) any())).thenReturn(pageImpl);
-        CustomPage<OfficerResponseDTO> actualAllOfficers = this.officerServiceImpl.getAllOfficers(1);
-        assertEquals(2, actualAllOfficers.getContent().size());
-        assertEquals(1, actualAllOfficers.getTotalPages());
-        assertEquals(2L, actualAllOfficers.getTotalElements());
-        assertEquals(2, actualAllOfficers.getSize());
-        assertEquals(2, actualAllOfficers.getNumberOfElements());
         assertEquals(0, actualAllOfficers.getNumber());
         verify(this.officerRepository).findAll((org.springframework.data.domain.Pageable) any());
     }
@@ -269,12 +198,14 @@ class OfficerServiceImplTest {
         verify(this.officerRepository).findById((UUID) any());
     }
 
+
     @Test
     void testGetOfficerById2() {
         when(this.officerRepository.findById((UUID) any())).thenReturn(Optional.<Officer>empty());
         assertThrows(RestException.class, () -> this.officerServiceImpl.getOfficerById(UUID.randomUUID()));
         verify(this.officerRepository).findById((UUID) any());
     }
+
 
     @Test
     void testGetOfficerByCardNumber() {
@@ -423,63 +354,6 @@ class OfficerServiceImplTest {
         verify(this.citizenExternalApiServiceImpl).getCitizenByCardNumber(anyLong());
         verify(this.citizenExternalApiServiceImpl).sendCheckingCertificate((Officer) any());
     }
-
-//    @Test
-//    void testAddOfficer3() {
-//        when(this.userServiceImpl.addUser((com.example.smartcity.payload.UserDTO) any()))
-//                .thenReturn(new ResponseEntity<Object>(HttpStatus.CONTINUE));
-//        when(this.userRepository.existsByCardNumber((Long) any())).thenReturn(false);
-//
-//        PoliceStation policeStation = new PoliceStation();
-//        policeStation.setRemark("Remark");
-//        policeStation.setId(UUID.randomUUID());
-//        policeStation.setUpdatedAt(mock(Timestamp.class));
-//        policeStation.setCreatedById(UUID.randomUUID());
-//        policeStation.setCreatedAt(mock(Timestamp.class));
-//        policeStation.setName("Name");
-//        policeStation.setDeleted(true);
-//        policeStation.setPhoneNumber("4105551212");
-//        policeStation.setAddress("42 Main St");
-//        policeStation.setUpdateById(UUID.randomUUID());
-//
-//        Officer officer = new Officer();
-//        officer.setLastName("Doe");
-//        officer.setId(UUID.randomUUID());
-//        officer.setUpdatedAt(mock(Timestamp.class));
-//        officer.setCreatedById(UUID.randomUUID());
-//        officer.setCreatedAt(mock(Timestamp.class));
-//        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-//        officer.setBirthDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-//        officer.setDeleted(true);
-//        officer.setCardNumber(1L);
-//        officer.setCertificate(1L);
-//        officer.setFirstName("Jane");
-//        officer.setUpdateById(UUID.randomUUID());
-//        officer.setRank(OfficerRank.DETECTIVE);
-//        officer.setPoliceStation(policeStation);
-//        when(this.officerRepository.save((Officer) any())).thenReturn(officer);
-//        when(this.officerRepository.findByCardNumber(anyLong())).thenReturn(Optional.<Officer>empty());
-//
-//        CitizenDTO citizenDTO = new CitizenDTO();
-//        citizenDTO.setCardNumber(1L);
-//        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
-//        citizenDTO.setBirthDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-//        citizenDTO.setFirstName("Jane");
-//        citizenDTO.setSurname("Doe");
-//        doNothing().when(this.citizenExternalApiServiceImpl).sendCheckingCertificate((Officer) any());
-//        when(this.citizenExternalApiServiceImpl.generateCertificate()).thenReturn(1L);
-//        when(this.citizenExternalApiServiceImpl.getCitizenByCardNumber(anyLong())).thenReturn(citizenDTO);
-//        ApiResponse actualAddOfficerResult = this.officerServiceImpl.addOfficer(new OfficerDTO());
-//        assertEquals("Officer saved successfully and sent for checking certificate", actualAddOfficerResult.getMessage());
-//        assertTrue(actualAddOfficerResult.isSuccess());
-//        verify(this.userServiceImpl).addUser((com.example.smartcity.payload.UserDTO) any());
-//        verify(this.userRepository).existsByCardNumber((Long) any());
-//        verify(this.officerRepository).findByCardNumber(anyLong());
-//        verify(this.officerRepository).save((Officer) any());
-//        verify(this.citizenExternalApiServiceImpl).generateCertificate();
-//        verify(this.citizenExternalApiServiceImpl).getCitizenByCardNumber(anyLong());
-//        verify(this.citizenExternalApiServiceImpl).sendCheckingCertificate((Officer) any());
-//    }
 
     @Test
     void testEditOfficer() {

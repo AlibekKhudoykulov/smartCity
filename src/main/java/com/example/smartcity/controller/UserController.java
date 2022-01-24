@@ -1,5 +1,6 @@
 package com.example.smartcity.controller;
 
+import com.example.smartcity.constants.PathConstant;
 import com.example.smartcity.service.impl.UserServiceImpl;
 import com.example.smartcity.payload.ApiResponse;
 import com.example.smartcity.payload.UserDTO;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping(PathConstant.USER_CONTROLLER)
 @RequiredArgsConstructor
 @CrossOrigin
 public class UserController {

@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity(name = "users")
 @Data
@@ -40,6 +41,9 @@ public class User extends AbsEntity implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
+    public <E> User(UUID randomUUID, String username, String password, Set<E> role, boolean b, boolean b1, boolean b2, boolean b3) {
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -35,7 +35,7 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
             responseEntity = httpRequestService.makeGETHTTPCallUsingHMAC(
                     "POLICE",
                     "get_resident",
-                    "http://citymanagementfull-env.eba-tixcjyas.us-east-2.elasticbeanstalk.com/api/v1/resident/card/"
+                    "http://Citymanagement-env.eba-qf3gtjxz.eu-central-1.elasticbeanstalk.com/api/v1/resident/card/"
                             + cardNumber,
                     "policeKey"
             );
@@ -109,7 +109,7 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
             httpRequestService.makePOSTHTTPCallUsingHMAC(
                     "POLICE",
                     "check_certificate",
-                    "http://citymanagementfull-env.eba-tixcjyas.us-east-2.elasticbeanstalk.com/api/v1/request/police/certificate",
+                    "http://Citymanagement-env.eba-qf3gtjxz.eu-central-1.elasticbeanstalk.com/api/v1/request/police/certificate",
                     "policeKey",
                     reqBody
             );
@@ -134,7 +134,7 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
             httpRequestService.makePOSTHTTPCallUsingHMAC(
                     "POLICE",
                     "died_person",
-                    "http://citymanagementfull-env.eba-tixcjyas.us-east-2.elasticbeanstalk.com/api/v1/request/police",
+                    "http://Citymanagement-env.eba-qf3gtjxz.eu-central-1.elasticbeanstalk.com/api/v1/request/police",
                     "policeKey",
                     reqBody
             );
@@ -159,7 +159,7 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
             httpRequestService.makePOSTHTTPCallUsingHMAC(
                     "POLICE",
                     "prisoner",
-                    "http://citymanagementfull-env.eba-tixcjyas.us-east-2.elasticbeanstalk.com/api/v1/request/police",
+                    "http://Citymanagement-env.eba-qf3gtjxz.eu-central-1.elasticbeanstalk.com/api/v1/request/police",
                     "policeKey",
                     reqBody
             );
@@ -184,7 +184,7 @@ public class CitizenExternalApiServiceImpl implements CitizenExternalApiService 
             httpRequestService.makePOSTHTTPCallUsingHMAC(
                     "POLICE",
                     "Liberation",
-                    "http://citymanagementfull-env.eba-tixcjyas.us-east-2.elasticbeanstalk.com/api/v1/request/police",
+                    "http://Citymanagement-env.eba-qf3gtjxz.eu-central-1.elasticbeanstalk.com/api/v1/request/police",
                     "policeKey",
                     reqBody
             );

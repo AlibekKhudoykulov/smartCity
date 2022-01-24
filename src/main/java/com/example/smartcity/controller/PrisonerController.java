@@ -1,5 +1,6 @@
 package com.example.smartcity.controller;
 
+import com.example.smartcity.constants.PathConstant;
 import com.example.smartcity.payload.responseDTO.CustomPage;
 import com.example.smartcity.payload.responseDTO.PrisonerResponseDTO;
 import com.example.smartcity.service.impl.PrisonerServiceImpl;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/prisoner")
+@RequestMapping(PathConstant.PRISONER_CONTROLLER)
 @RequiredArgsConstructor
 @CrossOrigin
 public class PrisonerController {
